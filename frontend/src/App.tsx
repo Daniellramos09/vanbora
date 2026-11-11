@@ -8,6 +8,8 @@ import { HomePage } from './pages/public/HomePage';
 import { HowItWorksPage } from './pages/public/HowItWorksPage';
 import { CategoriesPage } from './pages/public/CategoriesPage';
 import { ForProvidersPage } from './pages/public/ForProvidersPage';
+import { LoginPage } from './pages/public/LoginPage';
+import { RegisterPage } from './pages/public/RegisterPage';
 
 // Client pages
 import { ClientDashboard } from './pages/client/ClientDashboard';
@@ -42,6 +44,10 @@ const MainContent: React.FC = () => {
         return <CategoriesPage setCurrentTab={setCurrentTab} />;
       case 'for-providers':
         return <ForProvidersPage setCurrentTab={setCurrentTab} />;
+      case 'login':
+        return <LoginPage setCurrentTab={setCurrentTab} />;
+      case 'register':
+        return <RegisterPage setCurrentTab={setCurrentTab} />;
 
       // Client views
       case 'client-dashboard':

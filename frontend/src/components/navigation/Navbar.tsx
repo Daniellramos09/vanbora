@@ -261,30 +261,62 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => 
           </nav>
 
           {/* Action Button (Skeelo comfortable touch target) */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2 sm:gap-3">
             {currentRole === 'visitor' ? (
-              <button
-                onClick={() => {
-                  handleRoleSelect('client');
-                  setCurrentTab('new-request');
-                }}
-                className="px-6 py-3 bg-brand-blue hover:bg-[#1e54cc] text-white font-extrabold text-sm rounded-full shadow-sm transition-all hover:scale-105 active:scale-95"
-              >
-                Solicitar Transporte
-              </button>
+              <>
+                <button
+                  onClick={() => setCurrentTab('login')}
+                  className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-extrabold transition-colors rounded-full hover:bg-black/5 ${
+                    currentTab === 'login'
+                      ? 'text-brand-blue bg-brand-blue-soft/50'
+                      : 'text-brand-ink hover:text-brand-blue'
+                  }`}
+                >
+                  Entrar
+                </button>
+
+                <button
+                  onClick={() => setCurrentTab('register')}
+                  className={`px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-extrabold border-2 border-brand-border-strong hover:bg-black/5 transition-all active:scale-95 ${
+                    currentTab === 'register' ? 'bg-brand-surface shadow-sm border-brand-ink' : 'text-brand-ink'
+                  }`}
+                >
+                  Cadastrar
+                </button>
+
+                <button
+                  onClick={() => {
+                    handleRoleSelect('client');
+                    setCurrentTab('new-request');
+                  }}
+                  className="px-5 sm:px-6 py-2.5 bg-brand-blue hover:bg-[#1e54cc] text-white font-extrabold text-xs sm:text-sm rounded-full shadow-sm transition-all hover:scale-105 active:scale-95"
+                >
+                  Solicitar Transporte
+                </button>
+              </>
             ) : (
-              <div className="flex items-center gap-2 pl-3 border-l border-brand-border">
-                <div className="w-8 h-8 rounded-full bg-brand-ink text-white font-bold flex items-center justify-center text-xs">
-                  {currentUser.name.charAt(0)}
+              <div className="flex items-center gap-3 pl-3 border-l border-brand-border">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-brand-ink text-white font-bold flex items-center justify-center text-xs">
+                    {currentUser.name.charAt(0)}
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-brand-ink leading-tight truncate max-w-[120px]">
+                      {currentUser.name}
+                    </p>
+                    <p className="text-[10px] text-brand-muted">
+                      {currentRole === 'client' ? 'Contratante' : currentRole === 'provider' ? 'Motorista' : 'Auditor'}
+                    </p>
+                  </div>
                 </div>
-                <div className="text-left">
-                  <p className="text-xs font-bold text-brand-ink leading-tight truncate max-w-[120px]">
-                    {currentUser.name}
-                  </p>
-                  <p className="text-[10px] text-brand-muted">
-                    {currentRole === 'client' ? 'Contratante' : currentRole === 'provider' ? 'Motorista' : 'Auditor'}
-                  </p>
-                </div>
+
+                <button
+                  onClick={() => handleRoleSelect('visitor')}
+                  className="px-2.5 py-1 rounded-full text-[11px] font-bold text-brand-muted hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                  title="Sair da conta"
+                >
+                  Sair
+                </button>
               </div>
             )}
           </div>
@@ -336,18 +368,56 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => 
                 <span>Para Motoristas e Frotistas</span>
                 <ChevronRight className="w-4 h-4 text-brand-muted" />
               </button>
-              <div className="pt-2">
+              <div className="pt-3 space-y-2 border-t border-brand-border/60">
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => {
+                      setCurrentTab('login');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full py-2.5 bg-brand-canvas border border-brand-border-strong text-brand-ink font-bold text-xs rounded-full text-center"
+                  >
+                    Entrar
+                  </button>
+                  <button
+                    onClick={() => {
+                      setCurrentTab('register');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full py-2.5 bg-brand-surface border-2 border-brand-ink text-brand-ink font-bold text-xs rounded-full text-center"
+                  >
+                    Cadastrar
+                  </button>
+                </div>
                 <button
                   onClick={() => {
                     handleRoleSelect('client');
                     setCurrentTab('new-request');
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full py-3 bg-brand-blue text-white font-bold text-sm rounded-full text-center"
+                  className="w-full py-3 bg-brand-blue text-white font-bold text-sm rounded-full text-center shadow-sm"
                 >
                   Solicitar Transporte Agora
                 </button>
               </div>
+            </div>
+          )}
+
+          {currentRole !== 'visitor' && (
+            <div className="pt-2 border-t border-brand-border/60 flex items-center justify-between">
+              <div className="text-xs">
+                <p className="font-bold text-brand-ink">{currentUser.name}</p>
+                <p className="text-brand-muted text-[10px]">{currentUser.email}</p>
+              </div>
+              <button
+                onClick={() => {
+                  handleRoleSelect('visitor');
+                  setMobileMenuOpen(false);
+                }}
+                className="px-3 py-1.5 rounded-full text-xs font-bold text-rose-600 bg-rose-50"
+              >
+                Sair da conta
+              </button>
             </div>
           )}
         </div>

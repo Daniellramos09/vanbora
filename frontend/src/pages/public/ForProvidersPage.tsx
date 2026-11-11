@@ -7,8 +7,7 @@ export const ForProvidersPage: React.FC<{ setCurrentTab: (tab: string) => void }
   const { setRole } = useApp();
 
   const handleStart = () => {
-    setRole('provider');
-    setCurrentTab('provider-dashboard');
+    setCurrentTab('register');
   };
 
   return (

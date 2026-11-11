@@ -32,8 +32,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
   };
 
   const handleJoinProvider = () => {
-    setRole('provider');
-    setCurrentTab('provider-dashboard');
+    setCurrentTab('register');
   };
 
   return (
