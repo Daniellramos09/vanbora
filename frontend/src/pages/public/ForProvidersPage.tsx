@@ -32,7 +32,7 @@ export const ForProvidersPage: React.FC<{ setCurrentTab: (tab: string) => void }
             </div>
             <div className="flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-brand-ink">
               <CheckCircle2 className="w-4 h-4 text-brand-green flex-shrink-0" />
-              <span>Diga seu preço direto para o passageiro, sem taxa escondida</span>
+              <span>Preço justo já calculado pelo site — sem dor de cabeça de negociação</span>
             </div>
             <div className="flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-brand-ink">
               <CheckCircle2 className="w-4 h-4 text-brand-green flex-shrink-0" />
@@ -58,7 +58,7 @@ export const ForProvidersPage: React.FC<{ setCurrentTab: (tab: string) => void }
               <p className="font-bold text-brand-ink">O que é bom ter em dia:</p>
               <p className="text-brand-muted">✓ CNH categoria D com menção EAR</p>
               <p className="text-brand-muted">✓ Van revisada com cinto em todos os assentos</p>
-              <p className="text-brand-muted">✓ Seguro de passageiros (APP)</p>
+              <p className="text-brand-muted">✓ Documentação do veículo em dia (CRLV)</p>
             </div>
           </div>
         </div>

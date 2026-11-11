@@ -1,5 +1,6 @@
 import React from 'react';
-import { Shield, MapPin, Truck, Lock } from 'lucide-react';
+import { Shield, MapPin, Lock } from 'lucide-react';
+import { VanLogoIcon } from '../illustrations/VanLogoIcon';
 
 export const Footer: React.FC = () => {
   return (
@@ -10,14 +11,14 @@ export const Footer: React.FC = () => {
           <div className="space-y-3">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-xl bg-brand-ink flex items-center justify-center text-white">
-                <Truck className="w-4 h-4 text-brand-yellow" />
+                <VanLogoIcon className="w-4 h-4 text-brand-yellow" />
               </div>
               <span className="text-xl font-extrabold text-brand-ink">
                 Van<span className="text-brand-blue">Bora</span>
               </span>
             </div>
             <p className="text-xs leading-relaxed text-brand-muted">
-              Marketplace de fretamento e transporte coletivo por vans. Conectamos demanda qualificada a motoristas devidamente habilitados.
+              Marketplace simples de passeios e viagens em grupo por van. Conectamos famílias, amigos e passageiros direto a motoristas de confiança.
             </p>
             <div className="flex items-center gap-1.5 text-xs font-bold text-brand-ink pt-1">
               <MapPin className="w-3.5 h-3.5 text-brand-blue" />
@@ -31,11 +32,11 @@ export const Footer: React.FC = () => {
               Modalidades
             </h4>
             <ul className="space-y-2 text-xs">
-              <li className="hover:text-brand-blue cursor-pointer transition-colors">Transporte de Colaboradores (Empresas)</li>
               <li className="hover:text-brand-blue cursor-pointer transition-colors">Passeios e Excursões Familiares</li>
+              <li className="hover:text-brand-blue cursor-pointer transition-colors">Chácaras e Sítios de Fim de Semana</li>
               <li className="hover:text-brand-blue cursor-pointer transition-colors">Traslados Aeroportos (GRU / CGH)</li>
-              <li className="hover:text-brand-blue cursor-pointer transition-colors">Eventos Corporativos e Congressos</li>
-              <li className="hover:text-brand-blue cursor-pointer transition-colors">Transporte Escolar Autorizado (DTP)</li>
+              <li className="hover:text-brand-blue cursor-pointer transition-colors">Passeios Escolares e Aniversários</li>
+              <li className="hover:text-brand-blue cursor-pointer transition-colors">Casamentos e Eventos de Amigos</li>
             </ul>
           </div>
 
@@ -43,14 +44,14 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="text-xs font-extrabold text-brand-ink uppercase tracking-wider mb-3 flex items-center gap-1.5">
               <Shield className="w-3.5 h-3.5 text-brand-green" />
-              <span>Auditoria e Regras</span>
+              <span>Cuidado e Confiança</span>
             </h4>
             <ul className="space-y-2 text-xs">
-              <li className="hover:text-brand-blue cursor-pointer transition-colors">CNH Categoria D com EAR Obrigatório</li>
-              <li className="hover:text-brand-blue cursor-pointer transition-colors">Vistoria e CRLV Aluguel Semestral</li>
-              <li className="hover:text-brand-blue cursor-pointer transition-colors">Seguro Obrigatório de Passageiros (APP)</li>
+              <li className="hover:text-brand-blue cursor-pointer transition-colors">CNH Categoria D com EAR Verificada</li>
+              <li className="hover:text-brand-blue cursor-pointer transition-colors">Documentação do Veículo em Dia (CRLV)</li>
+              <li className="hover:text-brand-blue cursor-pointer transition-colors">Veículo Revisado e Cinto em Todos os Bancos</li>
               <li className="hover:text-brand-blue cursor-pointer transition-colors">Certidão Negativa de Antecedentes</li>
-              <li className="hover:text-brand-blue cursor-pointer transition-colors">Termos de Adesão e Responsabilidade</li>
+              <li className="hover:text-brand-blue cursor-pointer transition-colors">Combinação Clara de Horário e Retorno</li>
             </ul>
           </div>
 
@@ -75,7 +76,7 @@ export const Footer: React.FC = () => {
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-muted">
           <p>© 2026 VanBora Tecnologia de Mobilidade. Todos os direitos reservados.</p>
           <p className="text-center sm:text-right text-[11px]">
-            Intermediação de transporte coletivo sob demanda. Serviços executados por transportadores habilitados conforme CTB, ARTESP e DTP.
+            Plataforma de intermediação e conexão para viagens em van. Cada viagem é combinada e realizada por motoristas independentes e habilitados.
           </p>
         </div>
       </div>

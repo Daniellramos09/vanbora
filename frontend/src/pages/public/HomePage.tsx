@@ -127,17 +127,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
         </div>
       </section>
 
-      {/* 2. Panoramic Layered Cityscape Transition */}
-      <section className="relative w-full border-y border-brand-border bg-[#F5F2EB]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2 text-center sm:text-left flex items-center justify-between">
-          <p className="text-xs font-bold text-brand-muted uppercase tracking-wider">
-            Rotas do Dia a Dia em Toda a Grande São Paulo
-          </p>
-          <p className="text-xs font-medium text-brand-muted hidden sm:block">
-            Bairros da Capital · Passeios no Interior · Sítios · Festas e Aeroportos
-          </p>
+      {/* 2. Subtle Route Horizon Divider */}
+      <section className="relative w-full border-y border-brand-border bg-[#F5F2EB] py-1">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 text-center sm:text-left flex items-center justify-between text-[11px] font-semibold text-brand-muted">
+          <span className="uppercase tracking-wider">Rotas do dia a dia em toda a Grande São Paulo</span>
+          <span className="hidden sm:inline">Passeios · Sítios · Festas · Aeroportos</span>
         </div>
-        <CityHorizonIllustration className="w-full h-28 sm:h-36 object-cover" />
+        <CityHorizonIllustration className="w-full h-8 sm:h-10 object-cover opacity-90" />
       </section>
 
       {/* 3. Everyday Simple Trips (Passeios e Rotas da Vida Real) */}
@@ -213,7 +209,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
             passengers={12}
             vehicleModel="Ford Transit Escolar com Cinto em Todos os Bancos"
             driverName="Tia Valquíria & Monitor"
-            driverBio="Van escolar credenciada no DTP, com monitora para cuidar das crianças no embarque e desembarque."
+            driverBio="Van escolar bem cuidada, com monitora para ajudar as crianças no embarque e desembarque."
             priceTotal={420}
             pricePerPerson={35}
             onSelect={handleStartRequest}
@@ -270,10 +266,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
                 2
               </div>
               <h3 className="text-lg font-bold text-brand-ink">
-                Motoristas da sua região mandam orçamentos
+                Preço justo calculado pelo site
               </h3>
               <p className="text-xs sm:text-sm text-brand-muted leading-relaxed">
-                Quem tiver a van livre naquele dia envia o valor certinho, fotos da van e os detalhes. Você conversa direto e escolhe o que achar melhor.
+                O site calcula o valor transparente pelo trajeto, sem pegadinhas nem leilão. O motorista disponível na região aceita e combina os detalhes com você.
               </p>
             </div>
 
@@ -314,7 +310,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
                 </p>
                 <p className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-brand-green flex-shrink-0" />
-                  Diga o seu preço justo direto para o passageiro, sem taxa surpresa.
+                  Valor da viagem calculado pelo site — sem dor de cabeça de negociação.
                 </p>
                 <p className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-brand-green flex-shrink-0" />
@@ -376,10 +372,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
             </div>
 
             <div className="p-4 bg-brand-canvas rounded-2xl border border-brand-border space-y-2 text-center sm:text-left">
-              <Heart className="w-6 h-6 text-brand-yellow mx-auto sm:mx-0" />
-              <h3 className="text-sm font-bold text-brand-ink">Seguro para Todos</h3>
+              <MapPin className="w-6 h-6 text-brand-yellow mx-auto sm:mx-0" />
+              <h3 className="text-sm font-bold text-brand-ink">Horário e Ponto Certo</h3>
               <p className="text-xs text-brand-muted leading-relaxed">
-                Cobertura de seguro contra acidentes pessoais a passageiros (APP) para todo mundo viajar sossegado.
+                O motorista busca a turma no ponto combinado e garante o retorno no horário certo com todo mundo junto.
               </p>
             </div>
           </div>

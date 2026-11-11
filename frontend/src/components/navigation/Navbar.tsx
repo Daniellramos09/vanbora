@@ -4,9 +4,9 @@ import { UserRole } from '../../types';
 import {
   Menu,
   X,
-  Truck,
   ChevronRight,
 } from 'lucide-react';
+import { VanLogoIcon } from '../illustrations/VanLogoIcon';
 
 interface NavbarProps {
   currentTab: string;
@@ -75,14 +75,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => 
             className="flex items-center gap-3 cursor-pointer group"
           >
             <div className="w-11 h-11 rounded-2xl bg-brand-ink border-2 border-brand-ink flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
-              <Truck className="w-6 h-6 text-brand-yellow" />
+              <VanLogoIcon className="w-6 h-6 text-brand-yellow" />
             </div>
             <div>
               <span className="text-2xl font-extrabold tracking-tight text-brand-ink">
                 Van<span className="text-brand-blue">Bora</span>
               </span>
               <p className="text-[11px] font-semibold text-brand-muted -mt-1 hidden sm:block">
-                Transporte Coletivo & Fretamento
+                Vans para Passeios e Grupos
               </p>
             </div>
           </div>

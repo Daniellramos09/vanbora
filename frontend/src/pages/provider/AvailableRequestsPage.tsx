@@ -32,7 +32,7 @@ export const AvailableRequestsPage: React.FC<AvailableRequestsPageProps> = ({ se
   // Form states
   const [price, setPrice] = useState<number>(1200);
   const [selectedVehicleId, setSelectedVehicleId] = useState<string>(vehicles[0]?.id || '');
-  const [conditions, setConditions] = useState('Inclui motorista, combustível e seguro APP.');
+  const [conditions, setConditions] = useState('Inclui motorista, combustível, van higienizada e espera combinada.');
   const [notes, setNotes] = useState('');
   const [submittedSuccess, setSubmittedSuccess] = useState(false);
 
@@ -94,7 +94,7 @@ export const AvailableRequestsPage: React.FC<AvailableRequestsPageProps> = ({ se
             <option value="recorrente">Corporativo / Recorrente</option>
             <option value="eventual">Eventual / Aeroporto</option>
             <option value="viagem">Viagens / Excursões</option>
-            <option value="escolar_autorizado">Escolar (Alvará DTP)</option>
+            <option value="escolar_autorizado">Escolar / Crianças</option>
           </select>
         </div>
       </div>
@@ -247,7 +247,7 @@ export const AvailableRequestsPage: React.FC<AvailableRequestsPageProps> = ({ se
               label="Condições Comerciais"
               value={conditions}
               onChange={(e) => setConditions(e.target.value)}
-              helperText="Ex: Inclui motorista particular, combustível, pedágio e seguro APP"
+              helperText="Ex: Inclui motorista experiente, combustível, van com ar-condicionado e ida e volta garantidas"
               required
             />
 

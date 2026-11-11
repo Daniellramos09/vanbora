@@ -78,7 +78,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({ setCurrent
                 Atenção: Existem documentos que precisam da sua ação
               </h4>
               <p className="text-xs text-amber-800/90 leading-relaxed mt-0.5">
-                {pendingDocs.length} documento(s) com pendência ou em análise. Mantenha suas certidões e seguro APP em dia para continuar enviando propostas comerciais.
+                {pendingDocs.length} documento(s) com pendência ou em análise. Mantenha sua CNH e documento do veículo (CRLV) em dia para continuar recebendo pedidos de viagem.
               </p>
             </div>
           </div>

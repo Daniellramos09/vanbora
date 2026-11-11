@@ -40,7 +40,7 @@ export const ProviderDocumentsPage: React.FC = () => {
       <div className="space-y-1">
         <h1 className="text-2xl font-extrabold text-brand-text">Gestão de Documentação Obrigatória</h1>
         <p className="text-sm text-brand-muted">
-          A VanBora verifica a conformidade com as exigências do Código de Trânsito Brasileiro, ARTESP e regulamentação local.
+          A VanBora confere a documentação do motorista (CNH EAR) e do veículo (CRLV em dia) para garantir tranquilidade aos passageiros.
         </p>
       </div>
 

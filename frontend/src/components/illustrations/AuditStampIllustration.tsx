@@ -2,7 +2,7 @@ import React from 'react';
 
 export const AuditStampIllustration: React.FC<{ className?: string; text?: string }> = ({
   className = 'w-24 h-24',
-  text = 'AUDITADO SP',
+  text = 'MOTORISTA VERIFICADO',
 }) => {
   return (
     <div className={`relative inline-flex items-center justify-center select-none transform -rotate-12 ${className}`}>
@@ -33,9 +33,9 @@ export const AuditStampIllustration: React.FC<{ className?: string; text?: strin
           x="50"
           y="34"
           textAnchor="middle"
-          fontSize="7.5"
+          fontSize="6.5"
           fontWeight="800"
-          letterSpacing="1"
+          letterSpacing="0.8"
           fill="currentColor"
           fontFamily="system-ui"
         >
@@ -49,13 +49,13 @@ export const AuditStampIllustration: React.FC<{ className?: string; text?: strin
           x="50"
           y="68"
           textAnchor="middle"
-          fontSize="6.5"
+          fontSize="6"
           fontWeight="700"
           letterSpacing="0.5"
           fill="currentColor"
           fontFamily="system-ui"
         >
-          SEGURO APP 100%
+          VEÍCULO EM DIA
         </text>
         <text
           x="50"
@@ -68,7 +68,7 @@ export const AuditStampIllustration: React.FC<{ className?: string; text?: strin
           fontFamily="system-ui"
           opacity="0.75"
         >
-          DTP · ARTESP
+          GRANDE SP
         </text>
       </svg>
     </div>

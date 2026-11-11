@@ -27,7 +27,7 @@ export const ClientBookingsPage: React.FC<ClientBookingsPageProps> = ({ setCurre
         <div>
           <h1 className="text-2xl font-extrabold text-brand-text">Contratações Formalizadas</h1>
           <p className="text-sm text-brand-muted">
-            Serviços com van e motorista confirmados com cobertura de seguro APP e termos registrados.
+            Serviços com van e motorista confirmados com veículo verificado e termos registrados.
           </p>
         </div>
       </div>
@@ -89,9 +89,9 @@ export const ClientBookingsPage: React.FC<ClientBookingsPageProps> = ({ setCurre
                   <p className="text-[10px] font-bold text-brand-muted uppercase">Garantias do Serviço</p>
                   <p className="font-semibold text-emerald-700 flex items-center gap-1">
                     <ShieldCheck className="w-4 h-4 text-brand-green" />
-                    <span>Seguro APP 100% Ativo</span>
+                    <span>Motorista e Veículo Verificados</span>
                   </p>
-                  <p className="text-slate-500 text-[11px]">CNH D/EAR e CRLV Aluguel auditados</p>
+                  <p className="text-slate-500 text-[11px]">CNH D/EAR e CRLV em dia</p>
                 </div>
               </div>
 
@@ -108,7 +108,7 @@ export const ClientBookingsPage: React.FC<ClientBookingsPageProps> = ({ setCurre
                     size="sm"
                     variant="outline"
                     icon={<FileCheck2 className="w-4 h-4" />}
-                    onClick={() => alert(`Comprovante de Contrato #${b.id}\nOrigem: ${b.origin}\nDestino: ${b.destination}\nPrestador: ${b.providerName}\nValor: R$ ${b.price}\nTermos de Transporte e Seguro de Passageiros vinculados.`)}
+                    onClick={() => alert(`Comprovante de Contrato #${b.id}\nOrigem: ${b.origin}\nDestino: ${b.destination}\nPrestador: ${b.providerName}\nValor: R$ ${b.price}\nTermos de Transporte e Compromisso de Viagem vinculados.`)}
                   >
                     Ver Comprovante Formal
                   </Button>

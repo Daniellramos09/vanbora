@@ -48,7 +48,7 @@ export const AdminDocumentsPage: React.FC = () => {
         <div>
           <h1 className="text-2xl font-extrabold text-brand-text">Fila de Validação e Auditoria Documental</h1>
           <p className="text-sm text-brand-muted">
-            Conformidade obrigatória conforme Código de Trânsito Brasileiro e regulamentações metropolitanas (ARTESP/DTP).
+            Conformidade e verificação documental dos motoristas e veículos cadastrados na plataforma.
           </p>
         </div>
 
@@ -160,7 +160,7 @@ export const AdminDocumentsPage: React.FC = () => {
 
           <Input
             label="Motivo da Pendência / Orientação"
-            placeholder="Ex: A apólice de seguro enviada venceu no mês passado. Favor enviar a renovação."
+            placeholder="Ex: O documento enviado está ilegível ou com prazo vencido. Favor enviar uma foto nítida e atualizada."
             value={rejectionReason}
             onChange={(e) => setRejectionReason(e.target.value)}
             required

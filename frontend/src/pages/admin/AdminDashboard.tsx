@@ -71,7 +71,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ setCurrentTab })
           <div>
             <p className="text-xs font-bold uppercase text-brand-muted">Vans na Plataforma</p>
             <h3 className="text-2xl font-extrabold text-brand-text">{vehicles.length}</h3>
-            <p className="text-[10px] text-emerald-600 font-semibold">100% com seguro APP</p>
+            <p className="text-[10px] text-emerald-600 font-semibold">100% com documentação em dia</p>
           </div>
         </Card>
 

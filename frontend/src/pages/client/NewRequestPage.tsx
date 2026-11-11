@@ -163,7 +163,7 @@ export const NewRequestPage: React.FC<NewRequestPageProps> = ({ setCurrentTab })
                 { value: 'eventual', label: 'Transporte Eventual (Passeio / Diária / Aeroporto)' },
                 { value: 'recorrente', label: 'Transporte Recorrente (Empresarial / Contrato Fixo)' },
                 { value: 'viagem', label: 'Viagem / Excursão (Intermunicipal Grande SP)' },
-                { value: 'escolar_autorizado', label: 'Escolar / Institucional (Exige alvará DTP)' },
+                { value: 'escolar_autorizado', label: 'Passeio Escolar / Crianças e Monitoria' },
               ]}
             />
           </div>
