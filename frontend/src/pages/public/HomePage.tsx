@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { VanWithDriverIllustration } from '../../components/illustrations/VanWithDriverIllustration';
 import { CityHorizonIllustration } from '../../components/illustrations/CityHorizonIllustration';
@@ -9,10 +9,12 @@ import {
   ArrowRight,
   ShieldCheck,
   CheckCircle2,
-  Briefcase,
-  Calendar,
+  Users,
+  Heart,
+  Smile,
   Compass,
-  FileCheck,
+  Calendar,
+  Sparkles,
   MapPin,
 } from 'lucide-react';
 
@@ -22,6 +24,7 @@ interface HomePageProps {
 
 export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
   const { setRole } = useApp();
+  const [activeExampleTab, setActiveExampleTab] = useState<'familia' | 'criancas' | 'aeroporto'>('familia');
 
   const handleStartRequest = () => {
     setRole('client');
@@ -35,17 +38,17 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
 
   return (
     <div className="space-y-24 pb-20 overflow-hidden bg-brand-canvas">
-      {/* 1. Hero Section: Layered Narrative & Character-Led Moving Van */}
+      {/* 1. Hero Section: Peaceful, Friendly, Human */}
       <section className="relative pt-8 sm:pt-14 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-          {/* Left Column: Bold Editorial Voice */}
+          {/* Left Column: Peaceful & Welcoming Tone */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-brand-ink tracking-tight leading-[1.12]">
-              Sua van certa em São Paulo, sem a facada das grandes transportadoras.
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-brand-ink tracking-tight leading-[1.14]">
+              Junte a turma e vá de van. Direto com motoristas da sua confiança.
             </h1>
 
             <p className="text-base sm:text-lg text-brand-muted max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Conectamos empresas, colégios e famílias diretamente a proprietários de vans e frotistas legalizados na Grande SP. Orçamentos competitivos, motoristas com CNH EAR e seguro de passageiros em cada viagem.
+              Precisa levar as crianças para um aniversário, reunir a família para um sítio no sábado ou levar os amigos para o aeroporto? Conectamos você diretamente a motoristas autônomos de vans em São Paulo — pessoas acolhedoras, preço combinado direto e todo mundo viajando junto com tranquilidade.
             </p>
 
             {/* Action Group with Doodle Arrow */}
@@ -54,7 +57,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
                 onClick={handleStartRequest}
                 className="w-full sm:w-auto px-8 py-4 bg-brand-blue hover:bg-[#1d55cc] text-white font-extrabold text-base rounded-full shadow-towel transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2.5"
               >
-                <span>Solicitar Cotação de Transporte</span>
+                <span>Encontrar uma Van para Meu Grupo</span>
                 <ArrowRight className="w-5 h-5" />
               </button>
 
@@ -62,29 +65,44 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
                 onClick={handleJoinProvider}
                 className="w-full sm:w-auto px-6 py-4 bg-brand-surface hover:bg-[#F2ECE1] text-brand-ink font-bold text-sm rounded-full border-2 border-brand-border-strong transition-colors"
               >
-                Sou Motorista e quero viagens
+                Tenho Van e quero fazer viagens no fim de semana
               </button>
 
-              {/* Armadillo-style Doodle Arrow pointing to primary CTA (desktop only) */}
-              <div className="hidden xl:block absolute -bottom-12 left-64 pointer-events-none">
+              {/* Hand-drawn Doodle Arrow */}
+              <div className="hidden xl:block absolute -bottom-12 left-72 pointer-events-none">
                 <DoodleArrow className="w-14 h-10 text-brand-yellow" />
-                <span className="text-[11px] font-bold text-brand-muted -ml-2">100% gratuito</span>
+                <span className="text-[11px] font-bold text-brand-muted -ml-1">Sem custo para pedir</span>
               </div>
             </div>
 
-            {/* Micro-guarantees (Refined typography, no repetitive cards) */}
+            {/* Micro-values: Everyday Warmth */}
             <div className="pt-8 grid grid-cols-3 gap-6 border-t border-brand-border text-left">
               <div>
-                <p className="text-xl sm:text-2xl font-black text-brand-ink">100%</p>
-                <p className="text-xs font-medium text-brand-muted mt-0.5">Vans com vistoria e CRLV em dia</p>
+                <p className="text-xl sm:text-2xl font-black text-brand-ink flex items-center gap-1.5">
+                  <Users className="w-5 h-5 text-brand-blue" />
+                  <span>Juntos</span>
+                </p>
+                <p className="text-xs font-medium text-brand-muted mt-0.5">
+                  Todo mundo no mesmo veículo, sem dividir Ubers
+                </p>
               </div>
               <div>
-                <p className="text-xl sm:text-2xl font-black text-brand-green">Seguro APP</p>
-                <p className="text-xs font-medium text-brand-muted mt-0.5">Cobertura obrigatória de passageiros</p>
+                <p className="text-xl sm:text-2xl font-black text-brand-green flex items-center gap-1.5">
+                  <Heart className="w-5 h-5 text-brand-green" />
+                  <span>Cuidado</span>
+                </p>
+                <p className="text-xs font-medium text-brand-muted mt-0.5">
+                  Motoristas acostumados com crianças e famílias
+                </p>
               </div>
               <div>
-                <p className="text-xl sm:text-2xl font-black text-brand-yellow">Zero Gimmick</p>
-                <p className="text-xs font-medium text-brand-muted mt-0.5">Negociação direta com quem dirige</p>
+                <p className="text-xl sm:text-2xl font-black text-brand-yellow flex items-center gap-1.5">
+                  <Smile className="w-5 h-5 text-brand-yellow" />
+                  <span>Direto</span>
+                </p>
+                <p className="text-xs font-medium text-brand-muted mt-0.5">
+                  Valor justo combinado sem intermediários chatos
+                </p>
               </div>
             </div>
           </div>
@@ -94,14 +112,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
             <div className="w-full relative">
               <VanWithDriverIllustration className="w-full max-w-[440px] mx-auto drop-shadow-md" />
               
-              {/* Floating Verified Badge */}
+              {/* Floating Friendly Driver Badge */}
               <div className="absolute -bottom-3 sm:bottom-0 right-4 sm:right-6 bg-brand-surface border-2 border-brand-border-strong rounded-2xl p-3 shadow-towel flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-brand-green-soft text-brand-green flex items-center justify-center font-bold">
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-extrabold text-brand-ink">Motorista Regular</p>
-                  <p className="text-[10px] text-brand-muted">CNH D com EAR Ativo</p>
+                  <p className="text-xs font-extrabold text-brand-ink">Motorista Amigo</p>
+                  <p className="text-[10px] text-brand-muted">Van limpinha e revisada</p>
                 </div>
               </div>
             </div>
@@ -109,51 +127,125 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
         </div>
       </section>
 
-      {/* 2. Panoramic Layered Cityscape Transition (Allwhere Inspired) */}
+      {/* 2. Panoramic Layered Cityscape Transition */}
       <section className="relative w-full border-y border-brand-border bg-[#F5F2EB]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2 text-center sm:text-left flex items-center justify-between">
           <p className="text-xs font-bold text-brand-muted uppercase tracking-wider">
-            Cobertura Metropolitana Ativa
+            Rotas do Dia a Dia em Toda a Grande São Paulo
           </p>
           <p className="text-xs font-medium text-brand-muted hidden sm:block">
-            Capital · Guarulhos (GRU) · ABC Paulista · Osasco · Destinos Turísticos
+            Bairros da Capital · Passeios no Interior · Sítios · Festas e Aeroportos
           </p>
         </div>
         <CityHorizonIllustration className="w-full h-28 sm:h-36 object-cover" />
       </section>
 
-      {/* 3. The Proof Section: Real Case Study Boarding Pass (Slite + Armadillo) */}
+      {/* 3. Everyday Simple Trips (Passeios e Rotas da Vida Real) */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto space-y-3 mb-10">
+        <div className="text-center max-w-2xl mx-auto space-y-3 mb-8">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-ink tracking-tight">
-            A matemática real de quem contrata com a VanBora.
+            Veja como é simples organizar uma viagem em grupo
           </h2>
           <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
-            Uma empresa de tecnologia na Bela Vista precisava transportar seus colaboradores até o Aeroporto de Guarulhos. Veja a diferença entre a cotação tradicional e a contratação na nossa rede:
+            Exemplos reais de trajetos que famílias e grupos contratam nos fins de semana e feriados:
           </p>
+
+          {/* Route Filter Pills */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-3">
+            <button
+              onClick={() => setActiveExampleTab('familia')}
+              className={`px-4 py-2 rounded-full text-xs font-extrabold transition-all ${
+                activeExampleTab === 'familia'
+                  ? 'bg-brand-ink text-white shadow-sm'
+                  : 'bg-brand-surface text-brand-muted hover:text-brand-ink border border-brand-border'
+              }`}
+            >
+              🌿 Sítio no Sábado (Família)
+            </button>
+            <button
+              onClick={() => setActiveExampleTab('criancas')}
+              className={`px-4 py-2 rounded-full text-xs font-extrabold transition-all ${
+                activeExampleTab === 'criancas'
+                  ? 'bg-brand-ink text-white shadow-sm'
+                  : 'bg-brand-surface text-brand-muted hover:text-brand-ink border border-brand-border'
+              }`}
+            >
+              🎈 Crianças / Aniversário
+            </button>
+            <button
+              onClick={() => setActiveExampleTab('aeroporto')}
+              className={`px-4 py-2 rounded-full text-xs font-extrabold transition-all ${
+                activeExampleTab === 'aeroporto'
+                  ? 'bg-brand-ink text-white shadow-sm'
+                  : 'bg-brand-surface text-brand-muted hover:text-brand-ink border border-brand-border'
+              }`}
+            >
+              ✈️ Família com Malas no Aeroporto
+            </button>
+          </div>
         </div>
 
-        <BoardingPassCard
-          origin="Av. Paulista, 1000 - Bela Vista, São Paulo"
-          destination="Aeroporto Internacional de Guarulhos (GRU) - Terminal 3"
-          date="Seg a Sex (08h às 17h) e Sáb (09h às 12h)"
-          passengers={15}
-          vehicleModel="Mercedes-Benz Sprinter 516 Executiva"
-          driverName="Carlos Eduardo Ramos"
-          fairPrice={19800}
-          traditionalQuotePrice={24000}
-          onSelect={handleStartRequest}
-        />
+        {/* Dynamic Card according to selected real simple route */}
+        {activeExampleTab === 'familia' && (
+          <BoardingPassCard
+            title="Passeio em Família para Sítio no Sábado"
+            badgeText="Passeio de Fim de Semana"
+            origin="Penha (Zona Leste) - São Paulo"
+            destination="Sítio & Chácara em Mairiporã - SP (Ida e Volta)"
+            date="Sábado · Saída 08h · Volta 18h"
+            passengers={15}
+            vehicleModel="Mercedes-Benz Sprinter (19 Lugares com Ar)"
+            driverName="Seu Carlos (Faz transporte escolar na semana)"
+            driverBio="Motorista há 12 anos na Penha, tem o sábado livre e adora levar famílias para passeios tranquilos."
+            priceTotal={680}
+            pricePerPerson={45}
+            onSelect={handleStartRequest}
+          />
+        )}
+
+        {activeExampleTab === 'criancas' && (
+          <BoardingPassCard
+            title="Levar as Crianças para Aniversário / Parque"
+            badgeText="Passeio com Monitoria"
+            origin="Santana (Zona Norte) - São Paulo"
+            destination="Buffet Infantil no Tatuapé (Zona Leste)"
+            date="Domingo · Saída 13h30 · Retorno 18h30"
+            passengers={12}
+            vehicleModel="Ford Transit Escolar com Cinto em Todos os Bancos"
+            driverName="Tia Valquíria & Monitor"
+            driverBio="Van escolar credenciada no DTP, com monitora para cuidar das crianças no embarque e desembarque."
+            priceTotal={420}
+            pricePerPerson={35}
+            onSelect={handleStartRequest}
+          />
+        )}
+
+        {activeExampleTab === 'aeroporto' && (
+          <BoardingPassCard
+            title="Família e Amigos para o Aeroporto com Malas"
+            badgeText="Traslado Sem Estresse"
+            origin="Vila Mariana - São Paulo"
+            destination="Aeroporto de Guarulhos (GRU) - Terminal 2"
+            date="Sexta-feira · Saída 05h da manhã"
+            passengers={10}
+            vehicleModel="Renault Master Executiva com Bagageiro Grande"
+            driverName="Marcos Vinícius"
+            driverBio="Amplo espaço para malas grandes e pranchas, pontualidade britânica para ninguém perder o voo."
+            priceTotal={480}
+            pricePerPerson={48}
+            onSelect={handleStartRequest}
+          />
+        )}
       </section>
 
-      {/* 4. A Viagem em Fita Contínua (Sem 3 caixinhas separadas) */}
+      {/* 4. Como Funciona para os Passageiros (Sem complicação) */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-ink tracking-tight">
-            Do primeiro ponto até o destino, tudo orquestrado.
+            Como funciona para quem quer viajar junto
           </h2>
           <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
-            Esqueça trocas intermináveis de mensagens no WhatsApp sem saber se o veículo vai aparecer.
+            Nada de burocracia ou formulários difíceis. Em três passos rápidos você combina a viagem:
           </p>
         </div>
 
@@ -165,10 +257,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
                 1
               </div>
               <h3 className="text-lg font-bold text-brand-ink">
-                Defina o trajeto e os embarques
+                Conte para onde você quer ir
               </h3>
               <p className="text-xs sm:text-sm text-brand-muted leading-relaxed">
-                Adicione paradas no Metrô Tatuapé, Barra Funda ou em qualquer endereço intermediário. A plataforma calcula o tempo e a quilometragem justa.
+                Informe o dia, quantas pessoas vão (família, amigos, crianças) e se precisa pegar gente em mais de um lugar do bairro.
               </p>
             </div>
 
@@ -178,10 +270,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
                 2
               </div>
               <h3 className="text-lg font-bold text-brand-ink">
-                Receba orçamentos de quem tem van livre
+                Motoristas da sua região mandam orçamentos
               </h3>
               <p className="text-xs sm:text-sm text-brand-muted leading-relaxed">
-                Motoristas autônomos que estão com horários ociosos na sua região enviam propostas competitivas com fotos do veículo e condições claras.
+                Quem tiver a van livre naquele dia envia o valor certinho, fotos da van e os detalhes. Você conversa direto e escolhe o que achar melhor.
               </p>
             </div>
 
@@ -191,115 +283,123 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentTab }) => {
                 3
               </div>
               <h3 className="text-lg font-bold text-brand-ink">
-                Feche com Seguro APP garantido
+                Embarque com tranquilidade
               </h3>
               <p className="text-xs sm:text-sm text-brand-muted leading-relaxed">
-                Você compara veículo, capacidade e avaliações. O contrato é emitido com placa do veículo, motorista qualificado e cobertura de seguro para todos.
+                O motorista busca a turma no horário combinado, todo mundo viaja sentado com cinto de segurança e a diversão começa na van.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. Categorias Regulamentadas na Grande SP */}
+      {/* 5. Special Section for Independent Drivers (O "Tio da Van") */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-ink tracking-tight">
-            Vans preparadas para cada tipo de missão
-          </h2>
-          <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
-            Não colocamos qualquer veículo para qualquer serviço. Cada categoria exige uma autorização legal correspondente.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="p-6 bg-brand-surface rounded-3xl border border-brand-border-strong space-y-3 transition-transform hover:-translate-y-1">
-            <div className="w-10 h-10 rounded-2xl bg-brand-blue-soft text-brand-blue flex items-center justify-center">
-              <Briefcase className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-brand-ink">Corporativo e Turnos</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Transporte contínuo de equipes entre estações, polos industriais e sedes corporativas na capital e Grande SP.
-            </p>
-          </div>
-
-          <div className="p-6 bg-brand-surface rounded-3xl border border-brand-border-strong space-y-3 transition-transform hover:-translate-y-1">
-            <div className="w-10 h-10 rounded-2xl bg-brand-green-soft text-brand-green flex items-center justify-center">
-              <Calendar className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-brand-ink">Eventos e Feiras</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Equipes técnicas e participantes para congressos no Expo Center Norte, Anhembi, Transamérica e casamentos.
-            </p>
-          </div>
-
-          <div className="p-6 bg-brand-surface rounded-3xl border border-brand-border-strong space-y-3 transition-transform hover:-translate-y-1">
-            <div className="w-10 h-10 rounded-2xl bg-brand-yellow-light text-amber-800 flex items-center justify-center">
-              <Compass className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-brand-ink">Excursões e Lazer</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Viagens particulares em família para São Roque (Rota do Vinho), Aparecida, litoral ou traslados aeroportuários.
-            </p>
-          </div>
-
-          <div className="p-6 bg-brand-surface rounded-3xl border border-brand-border-strong space-y-3 transition-transform hover:-translate-y-1">
-            <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center">
-              <FileCheck className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-brand-ink">Escolar & Pedagógico</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Passeios pedagógicos conduzidos exclusivamente por vans com alvará escolar DTP ativo e monitor registrado.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Compromisso com a Lei e Segurança (Armadillo-style stamp section) */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-brand-surface rounded-4xl border-2 border-brand-border-strong p-8 sm:p-12 shadow-towel relative overflow-hidden">
+        <div className="bg-[#FAF4E8] rounded-4xl border-2 border-brand-border-strong p-8 sm:p-12 shadow-towel relative overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             <div className="md:col-span-8 space-y-4">
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-ink">
-                Transporte de pessoas não admite amadorismo.
+              <span className="text-xs font-black text-amber-900 bg-brand-yellow px-3 py-1 rounded-full uppercase tracking-wider">
+                Para quem tem van própria
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-brand-ink tracking-tight">
+                Tem a van parada no sábado ou domingo? Faça viagens na sua região.
               </h2>
-              <p className="text-sm text-brand-muted leading-relaxed">
-                Toda van cadastrada passa por auditoria prévia. Conferimos a CNH categoria D com menção EAR, o CRLV em categoria aluguel, o laudo semestral de vistoria veicular e a apólice de Seguro APP para cada assento ocupado.
+              <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
+                Você que tem sua van escolar, faz fretamento ou trabalha por conta própria: sabe como é bom arrumar uma graninha extra no fim de semana levando um grupo para um passeio, casamento ou sítio.
               </p>
-              <div className="pt-2 flex flex-wrap gap-3">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-canvas text-brand-ink font-bold text-xs border border-brand-border">
-                  <ShieldCheck className="w-4 h-4 text-brand-green" /> CNH D com EAR
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-canvas text-brand-ink font-bold text-xs border border-brand-border">
-                  <ShieldCheck className="w-4 h-4 text-brand-green" /> CRLV Aluguel Regular
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-canvas text-brand-ink font-bold text-xs border border-brand-border">
-                  <ShieldCheck className="w-4 h-4 text-brand-green" /> Seguro APP Obrigatório
-                </span>
+              <div className="space-y-2 text-xs sm:text-sm text-brand-ink font-semibold pt-1">
+                <p className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-green flex-shrink-0" />
+                  Você escolhe quais viagens quer fazer conforme sua disponibilidade.
+                </p>
+                <p className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-green flex-shrink-0" />
+                  Diga o seu preço justo direto para o passageiro, sem taxa surpresa.
+                </p>
+                <p className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-green flex-shrink-0" />
+                  Atenda famílias, colégios e grupos do seu bairro que valorizam seu cuidado.
+                </p>
+              </div>
+
+              <div className="pt-3">
+                <button
+                  onClick={handleJoinProvider}
+                  className="px-6 py-3.5 bg-brand-ink hover:bg-[#253757] text-white font-extrabold text-sm rounded-full shadow-sm transition-transform active:scale-95 flex items-center gap-2"
+                >
+                  <span>Cadastrar Minha Van para Fim de Semana</span>
+                  <ArrowRight className="w-4 h-4 text-brand-yellow" />
+                </button>
               </div>
             </div>
 
             <div className="md:col-span-4 flex justify-center">
-              <AuditStampIllustration className="w-36 h-36" text="AUDITADO SP" />
+              <div className="bg-white p-6 rounded-3xl border border-brand-border shadow-soft text-center space-y-3">
+                <AuditStampIllustration className="w-28 h-28 mx-auto" text="MOTORISTA SP" />
+                <p className="text-xs font-bold text-brand-ink">Comunidade de Motoristas</p>
+                <p className="text-[11px] text-brand-muted">
+                  Trabalho honesto, viagens tranquilas e mais renda para quem cuida bem do seu veículo.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 7. Skeelo-style Warm Final Call to Action */}
+      {/* 6. Segurança e Cuidado com as Crianças e Famílias */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-brand-surface rounded-4xl border-2 border-brand-border-strong p-8 sm:p-12 shadow-towel space-y-6">
+          <div className="text-center max-w-xl mx-auto space-y-2">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-ink">
+              Paz de espírito para os pais e para quem organiza
+            </h2>
+            <p className="text-xs sm:text-sm text-brand-muted leading-relaxed">
+              Sabemos que transportar quem você ama exige muita confiança. Por isso fazemos questão de manter as coisas bem certinhas:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2">
+            <div className="p-4 bg-brand-canvas rounded-2xl border border-brand-border space-y-2 text-center sm:text-left">
+              <ShieldCheck className="w-6 h-6 text-brand-green mx-auto sm:mx-0" />
+              <h3 className="text-sm font-bold text-brand-ink">Motoristas Habilitados</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                CNH profissional categoria D com a observação EAR (Exerce Atividade Remunerada) verificada.
+              </p>
+            </div>
+
+            <div className="p-4 bg-brand-canvas rounded-2xl border border-brand-border space-y-2 text-center sm:text-left">
+              <CheckCircle2 className="w-6 h-6 text-brand-blue mx-auto sm:mx-0" />
+              <h3 className="text-sm font-bold text-brand-ink">Vans com Vistoria</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                Veículo revisado com cinto de segurança em todos os bancos e espaço para as mochilas e malas.
+              </p>
+            </div>
+
+            <div className="p-4 bg-brand-canvas rounded-2xl border border-brand-border space-y-2 text-center sm:text-left">
+              <Heart className="w-6 h-6 text-brand-yellow mx-auto sm:mx-0" />
+              <h3 className="text-sm font-bold text-brand-ink">Seguro para Todos</h3>
+              <p className="text-xs text-brand-muted leading-relaxed">
+                Cobertura de seguro contra acidentes pessoais a passageiros (APP) para todo mundo viajar sossegado.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Warm & Simple Final Call to Action */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
         <h2 className="text-3xl sm:text-5xl font-extrabold text-brand-ink tracking-tight">
-          Bora encontrar a van certa para o seu grupo?
+          Vai passear ou precisa levar a turma para algum lugar?
         </h2>
         <p className="text-base text-brand-muted max-w-xl mx-auto leading-relaxed">
-          Sem burocracia e sem compromisso. Preencha seu itinerário e receba propostas de motoristas avaliados na Grande São Paulo.
+          Peça um orçamento simples. Você recebe as opções de motoristas de van da sua região e combina direto, sem compromisso.
         </p>
         <div className="pt-2">
           <button
             onClick={handleStartRequest}
             className="px-10 py-5 bg-brand-blue hover:bg-[#1d55cc] text-white font-extrabold text-lg rounded-full shadow-towel hover:scale-105 active:scale-95 transition-all"
           >
-            Começar Cotação Gratuita
+            Pedir uma Van para Meu Grupo
           </button>
         </div>
       </section>
