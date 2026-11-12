@@ -28,7 +28,7 @@ interface AppContextType {
   submitDocument: (docId: string, fileName: string) => void;
   reviewDocument: (docId: string, status: DocumentStatus, reason?: string) => void;
   updateProviderStatus: (status: ProviderApprovalStatus) => void;
-  calculateEstimate: (params: { distanceKm: number; hours: number; passengers: number; waypointsCount: number }) => { min: number; max: number };
+  calculateEstimate: (params: { distanceKm: number; hours: number; passengers: number; waypointsCount: number }) => { min: number; max: number; suggested: number; pricePerPerson: number };
 }
 
 // Initial Mock Seed Data reflecting real everyday trips & independent drivers
@@ -475,11 +475,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       (distanceKm * kmRate + hours * hourRate + waypointsCount * waypointRate) * passengerFactor;
     
     // Minimum fair pricing floor for chartered van dispatch in SP
-    const floor = Math.max(350, baseCost);
+    const floor = Math.max(380, baseCost);
+    const suggested = Math.round(floor / 10) * 10;
+    const pricePerPerson = Math.max(15, Math.round(suggested / (passengers || 1)));
 
     return {
-      min: Math.round((floor * 0.9) / 10) * 10,
-      max: Math.round((floor * 1.2) / 10) * 10,
+      min: Math.round((floor * 0.95) / 10) * 10,
+      max: Math.round((floor * 1.15) / 10) * 10,
+      suggested,
+      pricePerPerson,
     };
   };
 
