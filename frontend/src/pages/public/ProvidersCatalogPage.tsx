@@ -5,6 +5,7 @@ import { VanBoraApi } from '../../services/apiClient';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { SkeletonCard } from '../../components/ui/Skeleton';
+import { VanGalleryModal, VanPhoto } from '../../components/ui/VanGalleryModal';
 import {
   MapPin,
   Star,
@@ -20,6 +21,7 @@ import {
   Calendar,
   AlertTriangle,
   BadgeCheck,
+  Camera,
 } from 'lucide-react';
 
 interface ProvidersCatalogPageProps {
@@ -41,6 +43,7 @@ interface ProviderCatalogItem {
   avatarUrl?: string;
   vanModel?: string;
   vanCapacity?: number;
+  photos?: VanPhoto[];
 }
 
 const DEMO_PROVIDERS: ProviderCatalogItem[] = [
@@ -58,6 +61,11 @@ const DEMO_PROVIDERS: ProviderCatalogItem[] = [
     verifiedCnhEar: true,
     vanModel: 'Mercedes-Benz Sprinter 516',
     vanCapacity: 19,
+    photos: [
+      { url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80', caption: 'Interior espaçoso com 19 poltronas reclináveis' },
+      { url: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=800&q=80', caption: 'Exterior da Sprinter impecável e vistoriada' },
+      { url: 'https://images.unsplash.com/photo-1464219789935-c2d9d9aba644?auto=format&fit=crop&w=800&q=80', caption: 'Bagageiro traseiro com espaço para malas e coolers' },
+    ],
   },
   {
     id: 'prov-2',
@@ -73,6 +81,10 @@ const DEMO_PROVIDERS: ProviderCatalogItem[] = [
     verifiedCnhEar: true,
     vanModel: 'Renault Master Grand L3H2',
     vanCapacity: 16,
+    photos: [
+      { url: 'https://images.unsplash.com/photo-1509749837427-ac94a2553d0e?auto=format&fit=crop&w=800&q=80', caption: 'Renault Master Grand com ar-condicionado digital' },
+      { url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80', caption: 'Assentos higienizados e cintos individuais' },
+    ],
   },
   {
     id: 'prov-3',
@@ -88,6 +100,9 @@ const DEMO_PROVIDERS: ProviderCatalogItem[] = [
     verifiedCnhEar: true,
     vanModel: 'Ford Transit Minibus',
     vanCapacity: 15,
+    photos: [
+      { url: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=800&q=80', caption: 'Ford Transit executiva ideal para traslados' },
+    ],
   },
   {
     id: 'prov-4',
@@ -103,6 +118,9 @@ const DEMO_PROVIDERS: ProviderCatalogItem[] = [
     verifiedCnhEar: true,
     vanModel: 'Mercedes-Benz Sprinter 415',
     vanCapacity: 16,
+    photos: [
+      { url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80', caption: 'Degrau retrátil facilitando embarque de idosos e crianças' },
+    ],
   },
 ];
 
@@ -113,6 +131,8 @@ export const ProvidersCatalogPage: React.FC<ProvidersCatalogPageProps> = ({ setC
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedProvider, setSelectedProvider] = useState<ProviderCatalogItem | null>(null);
   const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
+  const [selectedGalleryProvider, setSelectedGalleryProvider] = useState<ProviderCatalogItem | null>(null);
+  const [isGalleryOpen, setIsGalleryOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // Busca motoristas atualizados direto do PostgreSQL via Spring Boot
@@ -169,6 +189,11 @@ export const ProvidersCatalogPage: React.FC<ProvidersCatalogPageProps> = ({ setC
   const handleOpenContact = (provider: ProviderCatalogItem) => {
     setSelectedProvider(provider);
     setIsContactModalOpen(true);
+  };
+
+  const handleOpenGallery = (provider: ProviderCatalogItem) => {
+    setSelectedGalleryProvider(provider);
+    setIsGalleryOpen(true);
   };
 
   return (
@@ -305,14 +330,26 @@ export const ProvidersCatalogPage: React.FC<ProvidersCatalogPageProps> = ({ setC
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-brand-muted pt-1">
+                <div className="flex items-center justify-between text-brand-muted pt-1">
                   <span className="flex items-center gap-1 font-semibold text-brand-ink">
                     <Users className="w-3.5 h-3.5 text-brand-blue" />
                     {provider.vanCapacity || 16} lugares
                   </span>
-                  <span className="text-[11px] bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-md font-medium">
-                    {provider.vanModel || 'Van Executiva'}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-md font-medium">
+                      {provider.vanModel || 'Van Executiva'}
+                    </span>
+                    {provider.photos && provider.photos.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => handleOpenGallery(provider)}
+                        className="inline-flex items-center gap-1 text-[11px] font-bold text-brand-blue hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2.5 py-0.5 rounded-md border border-blue-200 transition-colors"
+                      >
+                        <Camera className="w-3 h-3" />
+                        <span>Ver Fotos ({provider.photos.length})</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-[11px] text-slate-600 mt-2">
@@ -413,6 +450,17 @@ export const ProvidersCatalogPage: React.FC<ProvidersCatalogPageProps> = ({ setC
             </div>
           </div>
         </Modal>
+      )}
+
+      {/* Modal de Galeria de Fotos da Van */}
+      {isGalleryOpen && selectedGalleryProvider && (
+        <VanGalleryModal
+          isOpen={isGalleryOpen}
+          onClose={() => setIsGalleryOpen(false)}
+          driverName={selectedGalleryProvider.nickname}
+          vanModel={selectedGalleryProvider.vanModel || 'Van Executiva'}
+          photos={selectedGalleryProvider.photos || []}
+        />
       )}
     </div>
   );

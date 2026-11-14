@@ -4,6 +4,7 @@ import { useToast } from '../../context/ToastContext';
 import { VanBoraApi } from '../../services/apiClient';
 import { calculateDistanceKm, GeoLocation } from '../../services/geoService';
 import { AddressAutocomplete } from '../../components/ui/AddressAutocomplete';
+import { InteractiveTripMap } from '../../components/ui/InteractiveTripMap';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
@@ -471,6 +472,16 @@ export const NewRequestPage: React.FC<NewRequestPageProps> = ({ setCurrentTab })
                 </span>
               </div>
             )}
+
+            {/* Mapa Interativo com Traçado de Rota */}
+            <div className="pt-2">
+              <InteractiveTripMap
+                originGeo={originGeo}
+                destGeo={destGeo}
+                originLabel={origin}
+                destLabel={destination}
+              />
+            </div>
 
             {/* Múltiplos Pontos de Embarque (Waypoints) */}
             <div className="bg-brand-canvas rounded-2xl p-4 sm:p-5 border border-brand-border space-y-3">
