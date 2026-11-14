@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { useToast } from '../../context/ToastContext';
+import { VanBoraApi } from '../../services/apiClient';
 import { VanLogoIcon } from '../../components/illustrations/VanLogoIcon';
 import { AuditStampIllustration } from '../../components/illustrations/AuditStampIllustration';
 import {
@@ -31,6 +33,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
   initialRole = 'client',
 }) => {
   const { setRole, setCurrentUser } = useApp();
+  const toast = useToast();
   const [roleType, setRoleType] = useState<'client' | 'provider'>(initialRole);
 
   // Common Form States
@@ -88,16 +91,44 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
-      setSuccessRegistered(true);
+    // Call real Spring Boot backend API with automatic fallback
+    const backendPayload = {
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
+      password,
+      role: roleType === 'client' ? 'ROLE_CLIENT' : 'ROLE_PROVIDER',
+      clientType: roleType === 'client' ? clientType : null,
+      companyName: roleType === 'client' && clientType === 'PJ' ? companyName : null,
+      city,
+      nickname: roleType === 'provider' ? name.split(' ')[0] : null,
+      vanModel: roleType === 'provider' ? vanModel : null,
+      vanCapacity: roleType === 'provider' ? parseInt(vanCapacity, 10) : null,
+      hasCnhEar: roleType === 'provider' ? hasCnhEar : null,
+      baseRegion: roleType === 'provider' ? primaryRegion : null,
+    };
 
-      // Register into App Context
+    VanBoraApi.register(backendPayload).then((res) => {
+      setIsLoading(false);
+
+      if (res.error && !res.isFallback) {
+        setErrorMsg(res.error);
+        toast.error('Falha no Cadastro', res.error);
+        return;
+      }
+
+      setSuccessRegistered(true);
       setRole(roleType);
+
+      if (res.isFallback) {
+        toast.info('Modo Demonstração Ativo', 'Cadastro realizado localmente em memória.');
+      } else {
+        toast.success('Conta Criada com Sucesso!', 'Seus dados foram salvos com segurança no PostgreSQL.');
+      }
 
       if (roleType === 'client') {
         setCurrentUser({
-          id: `usr-${Date.now().toString().slice(-4)}`,
+          id: res.data?.token ? `usr-${Date.now().toString().slice(-4)}` : `usr-${Date.now().toString().slice(-4)}`,
           name,
           email,
           phone,
@@ -125,7 +156,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
           setCurrentTab('provider-dashboard');
         }, 1200);
       }
-    }, 700);
+    });
   };
 
   return (

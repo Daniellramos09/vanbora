@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { useToast } from '../../context/ToastContext';
+import { VanBoraApi } from '../../services/apiClient';
 import { UserRole } from '../../types';
 import { VanLogoIcon } from '../../components/illustrations/VanLogoIcon';
 import { AuditStampIllustration } from '../../components/illustrations/AuditStampIllustration';
@@ -27,6 +29,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   initialRole = 'client',
 }) => {
   const { setRole, setCurrentUser } = useApp();
+  const toast = useToast();
   const [selectedRole, setSelectedRole] = useState<'client' | 'provider'>(initialRole);
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
@@ -53,15 +56,32 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
     setIsLoading(true);
 
-    setTimeout(() => {
+    // Call real Spring Boot backend API with automatic fallback
+    VanBoraApi.login({
+      email: emailOrPhone.trim(),
+      password,
+    }).then((res) => {
       setIsLoading(false);
+
+      if (res.error && !res.isFallback) {
+        setErrorMsg(res.error);
+        toast.error('Falha no Login', res.error);
+        return;
+      }
+
       setRole(selectedRole);
+
+      if (res.isFallback) {
+        toast.info('Modo Demonstração Ativo', 'Autenticado com credenciais em memória.');
+      } else {
+        toast.success('Login Realizado com Sucesso!', `Bem-vindo de volta, ${res.data?.name || 'ao VanBora'}!`);
+      }
 
       if (selectedRole === 'client') {
         setCurrentUser({
           id: 'usr-client-login',
-          name: emailOrPhone.includes('@') ? emailOrPhone.split('@')[0] : 'Passageiro VanBora',
-          email: emailOrPhone.includes('@') ? emailOrPhone : 'contato@passageiro.com.br',
+          name: res.data?.name || (emailOrPhone.includes('@') ? emailOrPhone.split('@')[0] : 'Passageiro VanBora'),
+          email: res.data?.email || (emailOrPhone.includes('@') ? emailOrPhone : 'contato@passageiro.com.br'),
           phone: !emailOrPhone.includes('@') ? emailOrPhone : '(11) 98765-4321',
           role: 'client',
           clientType: 'PF',
@@ -71,8 +91,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       } else {
         setCurrentUser({
           id: 'usr-prov-login',
-          name: emailOrPhone.includes('@') ? emailOrPhone.split('@')[0] : 'Motorista Parceiro',
-          email: emailOrPhone.includes('@') ? emailOrPhone : 'motorista@vanbora.com.br',
+          name: res.data?.name || (emailOrPhone.includes('@') ? emailOrPhone.split('@')[0] : 'Motorista Parceiro'),
+          email: res.data?.email || (emailOrPhone.includes('@') ? emailOrPhone : 'motorista@vanbora.com.br'),
           phone: !emailOrPhone.includes('@') ? emailOrPhone : '(11) 99123-8877',
           role: 'provider',
           providerStatus: 'APPROVED',
@@ -80,7 +100,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         });
         setCurrentTab('provider-dashboard');
       }
-    }, 600);
+    });
   };
 
   const handleQuickDemoLogin = (role: 'client' | 'provider' | 'admin') => {
