@@ -1,0 +1,47 @@
+name: Backend CI - Java 21 & Tests
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-ci.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Make mvnw executable
+      run: chmod +x backend/mvnw
+
+    - name: Run Unit Tests with Maven
+      run: |
+        cd backend
+        ./mvnw clean test
+
+    - name: Package JAR Application
+      run: |
+        cd backend
+        ./mvnw package -DskipTests
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: vanbora-backend-jar
+        path: backend/target/*.jar
+        retention-days: 7
