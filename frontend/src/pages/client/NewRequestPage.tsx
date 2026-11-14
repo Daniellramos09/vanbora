@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useToast } from '../../context/ToastContext';
 import { VanBoraApi } from '../../services/apiClient';
+import { calculateDistanceKm, GeoLocation } from '../../services/geoService';
+import { AddressAutocomplete } from '../../components/ui/AddressAutocomplete';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
@@ -102,6 +104,9 @@ export const NewRequestPage: React.FC<NewRequestPageProps> = ({ setCurrentTab })
   const [category, setCategory] = useState<TransportCategory>('eventual');
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
+  const [originGeo, setOriginGeo] = useState<GeoLocation | null>(null);
+  const [destGeo, setDestGeo] = useState<GeoLocation | null>(null);
+  const [calculatedKm, setCalculatedKm] = useState<number | null>(null);
   const [waypoints, setWaypoints] = useState<Waypoint[]>([]);
   const [newWaypointAddress, setNewWaypointAddress] = useState('');
   const [newWaypointPassengers, setNewWaypointPassengers] = useState(2);
@@ -148,8 +153,32 @@ export const NewRequestPage: React.FC<NewRequestPageProps> = ({ setCurrentTab })
     setWaypoints(waypoints.filter((w) => w.id !== id));
   };
 
+  // Recalcula distância quando origem ou destino com geocoding mudam
+  const handleOriginSelect = (address: string, location?: GeoLocation) => {
+    setOrigin(address);
+    if (location) {
+      setOriginGeo(location);
+      if (destGeo) {
+        const km = calculateDistanceKm(location.lat, location.lon, destGeo.lat, destGeo.lon);
+        setCalculatedKm(km);
+      }
+    }
+  };
+
+  const handleDestinationSelect = (address: string, location?: GeoLocation) => {
+    setDestination(address);
+    if (location) {
+      setDestGeo(location);
+      if (originGeo) {
+        const km = calculateDistanceKm(originGeo.lat, originGeo.lon, location.lat, location.lon);
+        setCalculatedKm(km);
+      }
+    }
+  };
+
   // Distance estimation based on stops & return
-  const estimatedDistanceKm = (hasReturn ? 75 : 40) + waypoints.length * 10;
+  const baseDistance = calculatedKm ? calculatedKm : (hasReturn ? 75 : 40);
+  const estimatedDistanceKm = (hasReturn ? baseDistance * 2 : baseDistance) + waypoints.length * 8;
   const estimatedHours = hasReturn ? 8 : 3;
 
   // Real-time Fair Operational Pricing Estimate
@@ -386,27 +415,43 @@ export const NewRequestPage: React.FC<NewRequestPageProps> = ({ setCurrentTab })
             />
           </div>
 
-          {/* Route Inputs with Visual Line */}
+          {/* Route Inputs with Visual Line & Autocomplete */}
           <div className="space-y-4 pt-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input
+              <AddressAutocomplete
                 label="Ponto de Embarque Inicial (Origem)"
-                placeholder="Ex: Rua Emílio Mallet, 800 - Tatuapé, São Paulo"
+                placeholder="Digite o bairro ou rua (ex: Penha, Tatuapé)..."
                 value={origin}
-                onChange={(e) => setOrigin(e.target.value)}
+                onChange={handleOriginSelect}
                 required
-                leftIcon={<MapPin className="w-4 h-4 text-brand-blue" />}
+                iconColor="text-brand-blue"
               />
 
-              <Input
+              <AddressAutocomplete
                 label="Destino Final do Passeio"
-                placeholder="Ex: Estrada do Vinho, km 5 - São Roque, SP"
+                placeholder="Digite o sítio, praia ou cidade (ex: Mairiporã, Santos)..."
                 value={destination}
-                onChange={(e) => setDestination(e.target.value)}
+                onChange={handleDestinationSelect}
                 required
-                leftIcon={<MapPin className="w-4 h-4 text-rose-500" />}
+                iconColor="text-rose-500"
               />
             </div>
+
+            {/* Trajeto Calculado Dinâmico */}
+            {calculatedKm && (
+              <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 flex items-center justify-between text-xs text-emerald-900 animate-in fade-in">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>
+                    Distância de rota estimada: <strong>~{calculatedKm} km</strong> (só ida)
+                    {hasReturn && <span> · <strong>~{calculatedKm * 2} km</strong> (ida e volta)</span>}
+                  </span>
+                </div>
+                <span className="text-[11px] font-black uppercase text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                  Rota Mapeada
+                </span>
+              </div>
+            )}
 
             {/* Múltiplos Pontos de Embarque (Waypoints) */}
             <div className="bg-brand-canvas rounded-2xl p-4 sm:p-5 border border-brand-border space-y-3">
