@@ -99,4 +99,15 @@ export const VanBoraApi = {
     request<any>(`/proposals/${proposalId}/accept?clientId=${clientId}`, {
       method: 'POST',
     }),
+
+  // Escrow & Check-in Anti-Golpe
+  checkInBooking: (bookingId: string, code: string) =>
+    request<any>(`/bookings/${bookingId}/check-in?code=${encodeURIComponent(code)}`, {
+      method: 'POST',
+    }),
+
+  completeBooking: (bookingId: string) =>
+    request<any>(`/bookings/${bookingId}/complete`, {
+      method: 'POST',
+    }),
 };

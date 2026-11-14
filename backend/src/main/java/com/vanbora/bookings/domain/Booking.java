@@ -49,4 +49,17 @@ public class Booking {
     @Column(name = "refund_percentage", precision = 5, scale = 2)
     @Builder.Default
     private java.math.BigDecimal refundPercentage = java.math.BigDecimal.ZERO;
+
+    @Column(name = "escrow_status", length = 30)
+    @Builder.Default
+    private String escrowStatus = "HELD"; // HELD, RELEASED, REFUNDED
+
+    @Column(name = "check_in_code", length = 10)
+    private String checkInCode;
+
+    @Column(name = "checked_in_at")
+    private LocalDateTime checkedInAt;
+
+    @Column(name = "completed_at")
+    private LocalDateTime completedAt;
 }

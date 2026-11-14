@@ -91,15 +91,49 @@ public class BookingService {
         request.setStatus(RequestStatus.CONTRACTED);
         serviceRequestRepository.save(request);
 
-        // Cria o registro formal de Booking
+        // Cria o registro formal de Booking com Código de Check-in e Custódia Retida (Escrow)
+        String checkInCode = "VB-" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
         Booking booking = Booking.builder()
                 .proposal(proposal)
                 .acceptedAt(LocalDateTime.now())
                 .status(BookingStatus.CONFIRMED)
+                .escrowStatus("HELD")
+                .checkInCode(checkInCode)
                 .build();
 
         Booking savedBooking = bookingRepository.save(booking);
         return BookingResponseDTO.fromEntity(savedBooking);
+    }
+
+    @Transactional
+    public BookingResponseDTO checkIn(UUID bookingId, String code) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Contratação não encontrada: " + bookingId));
+
+        if (!booking.getCheckInCode().equalsIgnoreCase(code.trim())) {
+            throw new BusinessRuleException("Código de check-in inválido. Solicite ao passageiro o código de 4 dígitos.");
+        }
+
+        booking.setStatus(BookingStatus.IN_PROGRESS);
+        booking.setCheckedInAt(LocalDateTime.now());
+        Booking saved = bookingRepository.save(booking);
+        return BookingResponseDTO.fromEntity(saved);
+    }
+
+    @Transactional
+    public BookingResponseDTO completeTrip(UUID bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Contratação não encontrada: " + bookingId));
+
+        if (booking.getStatus() != BookingStatus.IN_PROGRESS) {
+            throw new BusinessRuleException("Apenas viagens em andamento podem ser finalizadas.");
+        }
+
+        booking.setStatus(BookingStatus.COMPLETED);
+        booking.setEscrowStatus("RELEASED");
+        booking.setCompletedAt(LocalDateTime.now());
+        Booking saved = bookingRepository.save(booking);
+        return BookingResponseDTO.fromEntity(saved);
     }
 
     @Transactional(readOnly = true)

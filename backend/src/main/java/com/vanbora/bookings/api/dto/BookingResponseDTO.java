@@ -15,7 +15,11 @@ public record BookingResponseDTO(
     UUID vehicleId,
     BigDecimal amount,
     LocalDateTime acceptedAt,
-    BookingStatus status
+    BookingStatus status,
+    String escrowStatus,
+    String checkInCode,
+    LocalDateTime checkedInAt,
+    LocalDateTime completedAt
 ) {
     public static BookingResponseDTO fromEntity(Booking booking) {
         return new BookingResponseDTO(
@@ -26,7 +30,11 @@ public record BookingResponseDTO(
             booking.getProposal().getVehicleId(),
             booking.getProposal().getAmount(),
             booking.getAcceptedAt(),
-            booking.getStatus()
+            booking.getStatus(),
+            booking.getEscrowStatus(),
+            booking.getCheckInCode(),
+            booking.getCheckedInAt(),
+            booking.getCompletedAt()
         );
     }
 }

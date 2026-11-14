@@ -53,4 +53,21 @@ public class BookingController {
         BookingResponseDTO response = bookingService.acceptProposal(clientId, proposalId);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/bookings/{bookingId}/check-in")
+    @PreAuthorize("hasRole('PROVIDER')")
+    @Operation(summary = "Check-in do passageiro no embarque", description = "Motorista informa o código fornecido pelo passageiro para confirmar o embarque")
+    public ResponseEntity<BookingResponseDTO> checkIn(
+            @PathVariable UUID bookingId,
+            @RequestParam String code
+    ) {
+        return ResponseEntity.ok(bookingService.checkIn(bookingId, code));
+    }
+
+    @PostMapping("/bookings/{bookingId}/complete")
+    @PreAuthorize("hasRole('PROVIDER') or hasRole('CLIENT')")
+    @Operation(summary = "Concluir viagem e liberar valor retido (Custódia/Escrow)", description = "Finaliza o trajeto e libera o saldo na conta do motorista")
+    public ResponseEntity<BookingResponseDTO> completeTrip(@PathVariable UUID bookingId) {
+        return ResponseEntity.ok(bookingService.completeTrip(bookingId));
+    }
 }
