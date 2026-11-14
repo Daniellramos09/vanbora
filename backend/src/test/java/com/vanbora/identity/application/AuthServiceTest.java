@@ -6,6 +6,7 @@ import com.vanbora.identity.domain.CustomerProfile.CustomerType;
 import com.vanbora.identity.domain.User;
 import com.vanbora.identity.infrastructure.CustomerProfileRepository;
 import com.vanbora.identity.infrastructure.ProviderProfileRepository;
+import com.vanbora.identity.infrastructure.UserConsentRepository;
 import com.vanbora.identity.infrastructure.UserRepository;
 import com.vanbora.shared.domain.UserRole;
 import com.vanbora.shared.exception.BusinessRuleException;
@@ -39,6 +40,9 @@ class AuthServiceTest {
     private ProviderProfileRepository providerProfileRepository;
 
     @Mock
+    private UserConsentRepository userConsentRepository;
+
+    @Mock
     private PasswordEncoder passwordEncoder;
 
     @Mock
@@ -64,7 +68,9 @@ class AuthServiceTest {
                 null,
                 null,
                 null,
-                null
+                null,
+                true,
+                "v1.0-2026"
         );
 
         when(userRepository.existsByEmail("carlos@example.com")).thenReturn(false);
@@ -104,7 +110,9 @@ class AuthServiceTest {
                 null,
                 null,
                 null,
-                null
+                null,
+                true,
+                "v1.0-2026"
         );
 
         when(userRepository.existsByEmail("carlos@example.com")).thenReturn(true);

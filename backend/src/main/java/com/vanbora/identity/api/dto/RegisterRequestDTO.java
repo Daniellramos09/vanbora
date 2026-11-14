@@ -35,5 +35,9 @@ public record RegisterRequestDTO(
     String vanModel,
     Integer vanCapacity,
     Boolean hasCnhEar,
-    String baseRegion
+    String baseRegion,
+
+    // Conformidade LGPD (Art. 7º e 8º)
+    Boolean acceptedTerms,
+    String termVersion
 ) {}

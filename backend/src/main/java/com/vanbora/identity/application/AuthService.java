@@ -3,11 +3,14 @@ package com.vanbora.identity.application;
 import com.vanbora.identity.api.dto.AuthResponseDTO;
 import com.vanbora.identity.api.dto.LoginRequestDTO;
 import com.vanbora.identity.api.dto.RegisterRequestDTO;
+import com.vanbora.identity.domain.ConsentType;
 import com.vanbora.identity.domain.CustomerProfile;
 import com.vanbora.identity.domain.ProviderProfile;
 import com.vanbora.identity.domain.User;
+import com.vanbora.identity.domain.UserConsent;
 import com.vanbora.identity.infrastructure.CustomerProfileRepository;
 import com.vanbora.identity.infrastructure.ProviderProfileRepository;
+import com.vanbora.identity.infrastructure.UserConsentRepository;
 import com.vanbora.identity.infrastructure.UserRepository;
 import com.vanbora.shared.domain.UserRole;
 import com.vanbora.shared.exception.BusinessRuleException;
@@ -22,6 +25,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final CustomerProfileRepository customerProfileRepository;
     private final ProviderProfileRepository providerProfileRepository;
+    private final UserConsentRepository userConsentRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
@@ -29,11 +33,13 @@ public class AuthService {
             UserRepository userRepository,
             CustomerProfileRepository customerProfileRepository,
             ProviderProfileRepository providerProfileRepository,
+            UserConsentRepository userConsentRepository,
             PasswordEncoder passwordEncoder,
             JwtService jwtService) {
         this.userRepository = userRepository;
         this.customerProfileRepository = customerProfileRepository;
         this.providerProfileRepository = providerProfileRepository;
+        this.userConsentRepository = userConsentRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
     }
@@ -64,6 +70,19 @@ public class AuthService {
                     dto.baseRegion() != null ? dto.baseRegion() : "Grande São Paulo"
             );
             providerProfileRepository.save(profile);
+        }
+
+        // Registro de Consentimento LGPD (Art. 7º e 8º da Lei nº 13.709/2018)
+        if (Boolean.TRUE.equals(dto.acceptedTerms())) {
+            UserConsent consent = UserConsent.builder()
+                    .userId(savedUser.getId())
+                    .consentType(ConsentType.PRIVACY_POLICY)
+                    .termVersion(dto.termVersion() != null ? dto.termVersion() : "v1.0-2026")
+                    .granted(true)
+                    .ipAddress("127.0.0.1")
+                    .userAgent("VanBora Web Client")
+                    .build();
+            userConsentRepository.save(consent);
         }
 
         String token = jwtService.generateToken(savedUser.getId(), savedUser.getEmail(), savedUser.getRole());
