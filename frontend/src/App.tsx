@@ -3,6 +3,8 @@ import { AppProvider, useApp } from './context/AppContext';
 import { ToastProvider } from './context/ToastContext';
 import { Navbar } from './components/navigation/Navbar';
 import { Footer } from './components/navigation/Footer';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import { OfflineBanner } from './components/ui/OfflineBanner';
 
 // Public pages
 import { HomePage } from './pages/public/HomePage';
@@ -92,8 +94,13 @@ const MainContent: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-brand-bg text-brand-text">
+      <OfflineBanner />
       <Navbar currentTab={currentTab} setCurrentTab={setCurrentTab} />
-      <main className="flex-1">{renderContent()}</main>
+      <main className="flex-1">
+        <ErrorBoundary>
+          {renderContent()}
+        </ErrorBoundary>
+      </main>
       <Footer />
     </div>
   );

@@ -191,7 +191,26 @@ export const NewRequestPage: React.FC<NewRequestPageProps> = ({ setCurrentTab })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!origin.trim() || !destination.trim() || !date) return;
+    if (!origin.trim() || !destination.trim() || !date) {
+      toast.error('Campos Obrigatórios', 'Por favor, preencha os pontos de embarque, destino e a data da viagem.');
+      return;
+    }
+
+    if (origin.trim().toLowerCase() === destination.trim().toLowerCase()) {
+      toast.error('Endereços Inválidos', 'O ponto de embarque e o destino final não podem ser exatamente iguais.');
+      return;
+    }
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    if (date < todayStr) {
+      toast.error('Data Inválida', 'A data de partida não pode estar no passado.');
+      return;
+    }
+
+    if (Number(passengers) < 1) {
+      toast.error('Passageiros Inválidos', 'A viagem deve ter pelo menos 1 passageiro.');
+      return;
+    }
 
     const requestTitle = title.trim() || `Passeio de ${origin.split('-')[0].trim()} para ${destination.split('-')[0].trim()}`;
 

@@ -4,6 +4,7 @@ import { useToast } from '../../context/ToastContext';
 import { VanBoraApi } from '../../services/apiClient';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
+import { SkeletonCard } from '../../components/ui/Skeleton';
 import {
   MapPin,
   Star,
@@ -112,30 +113,38 @@ export const ProvidersCatalogPage: React.FC<ProvidersCatalogPageProps> = ({ setC
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedProvider, setSelectedProvider] = useState<ProviderCatalogItem | null>(null);
   const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // Busca motoristas atualizados direto do PostgreSQL via Spring Boot
   useEffect(() => {
     let isMounted = true;
     async function loadCatalog() {
-      const res = await VanBoraApi.getProvidersCatalog();
-      if (res.data && Array.isArray(res.data) && res.data.length > 0 && isMounted) {
-        // Mescla com os demos
-        const apiMapped: ProviderCatalogItem[] = res.data.map((p: any) => ({
-          id: p.id,
-          userId: p.userId,
-          name: p.name,
-          nickname: p.nickname || p.name,
-          baseRegion: p.baseRegion || 'Grande São Paulo',
-          operatingZones: p.operatingZones || 'São Paulo e Região Metropolitana',
-          rating: Number(p.rating) || 5.0,
-          completedTrips: p.completedTrips || 12,
-          bio: p.bio || 'Motorista parceiro com CNH EAR e van vistoriada.',
-          amenities: p.amenities || 'Ar-condicionado, Cinto de segurança',
-          verifiedCnhEar: p.verifiedCnhEar ?? true,
-          vanModel: 'Van Executiva',
-          vanCapacity: 16,
-        }));
-        setProviders([...apiMapped, ...DEMO_PROVIDERS.filter((d) => !apiMapped.some((a) => a.id === d.id))]);
+      setIsLoading(true);
+      try {
+        const res = await VanBoraApi.getProvidersCatalog();
+        if (res.data && Array.isArray(res.data) && res.data.length > 0 && isMounted) {
+          // Mescla com os demos
+          const apiMapped: ProviderCatalogItem[] = res.data.map((p: any) => ({
+            id: p.id,
+            userId: p.userId,
+            name: p.name,
+            nickname: p.nickname || p.name,
+            baseRegion: p.baseRegion || 'Grande São Paulo',
+            operatingZones: p.operatingZones || 'São Paulo e Região Metropolitana',
+            rating: Number(p.rating) || 5.0,
+            completedTrips: p.completedTrips || 12,
+            bio: p.bio || 'Motorista parceiro com CNH EAR e van vistoriada.',
+            amenities: p.amenities || 'Ar-condicionado, Cinto de segurança',
+            verifiedCnhEar: p.verifiedCnhEar ?? true,
+            vanModel: 'Van Executiva',
+            vanCapacity: 16,
+          }));
+          setProviders([...apiMapped, ...DEMO_PROVIDERS.filter((d) => !apiMapped.some((a) => a.id === d.id))]);
+        }
+      } catch (err) {
+        console.warn('Erro ao carregar catálogo da API:', err);
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
     }
     loadCatalog();
@@ -210,9 +219,37 @@ export const ProvidersCatalogPage: React.FC<ProvidersCatalogPageProps> = ({ setC
         </div>
       </div>
 
-      {/* Lista de Motoristas em Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filteredProviders.map((provider) => (
+      {/* Lista de Motoristas em Cards com Skeleton Loading */}
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+        </div>
+      ) : filteredProviders.length === 0 ? (
+        <div className="bg-white rounded-3xl border-2 border-brand-border-strong p-12 text-center space-y-3 shadow-towel">
+          <p className="text-base font-extrabold text-brand-ink">
+            Nenhum motorista encontrado nesta região
+          </p>
+          <p className="text-xs text-brand-muted max-w-sm mx-auto">
+            Tente buscar por outro bairro ou selecione "Todas as Regiões" para ver profissionais disponíveis.
+          </p>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setSelectedRegion('all');
+              setSearchTerm('');
+            }}
+            className="text-xs mt-2"
+          >
+            Limpar Filtros
+          </Button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {filteredProviders.map((provider) => (
           <div
             key={provider.id}
             className="bg-white rounded-3xl border-2 border-brand-border-strong p-6 shadow-towel hover:shadow-towel-hover transition-all flex flex-col justify-between space-y-4"
@@ -307,7 +344,8 @@ export const ProvidersCatalogPage: React.FC<ProvidersCatalogPageProps> = ({ setC
             </div>
           </div>
         ))}
-      </div>
+        </div>
+      )}
 
       {/* Modal Educativo: Por que o telefone direto é liberado após a reserva protegida? */}
       {isContactModalOpen && selectedProvider && (
