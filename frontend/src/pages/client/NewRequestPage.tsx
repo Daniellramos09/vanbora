@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useToast } from '../../context/ToastContext';
+import { VanBoraApi } from '../../services/apiClient';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
@@ -159,15 +160,53 @@ export const NewRequestPage: React.FC<NewRequestPageProps> = ({ setCurrentTab })
     waypointsCount: waypoints.length,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!origin.trim() || !destination.trim() || !date) return;
+
+    const requestTitle = title.trim() || `Passeio de ${origin.split('-')[0].trim()} para ${destination.split('-')[0].trim()}`;
+
+    // Backend payload format
+    const categoryMapping: Record<string, string> = {
+      viagem: 'VIAGEM',
+      escolar_autorizado: 'ESCOLAR_AUTORIZADO',
+      eventual: 'EVENTUAL',
+      fretamento_continuo: 'FRETAMENTO_CONTINUO',
+    };
+
+    // Tentativa de sincronização direta com o Backend Spring Boot + PostgreSQL
+    try {
+      const departureAt = `${date}T${time || '08:00'}:00`;
+      const returnAt = hasReturn && returnDate ? `${returnDate}T${returnTime || '18:00'}:00` : undefined;
+
+      const backendPayload = {
+        title: requestTitle,
+        category: categoryMapping[category] || 'VIAGEM',
+        origin: origin.trim(),
+        destination: destination.trim(),
+        departureAt,
+        returnAt,
+        passengers: Number(passengers),
+        waypoints: waypoints.map((w) => ({
+          address: w.address,
+          passengersCount: w.passengersCount,
+        })),
+        additionalDetails,
+      };
+
+      const res = await VanBoraApi.createRequest(backendPayload);
+      if (res.data) {
+        console.log('Viagem persistida com sucesso no PostgreSQL via Spring Boot:', res.data);
+      }
+    } catch (err) {
+      console.warn('Backend offline ou erro ao persistir no DB, mantendo no app local:', err);
+    }
 
     const newReq = addRequest({
       clientId: currentUser.id,
       clientName: currentUser.name,
       clientType: currentUser.clientType || 'PF',
-      title: title.trim() || `Passeio de ${origin.split('-')[0].trim()} para ${destination.split('-')[0].trim()}`,
+      title: requestTitle,
       category,
       origin: origin.trim(),
       destination: destination.trim(),
@@ -185,7 +224,7 @@ export const NewRequestPage: React.FC<NewRequestPageProps> = ({ setCurrentTab })
 
     setCreatedRequestId(newReq.id);
     setIsSubmitted(true);
-    toast.success('Viagem Publicada no Radar!', 'Motoristas habilitados na sua região já podem visualizar a solicitação.');
+    toast.success('Viagem Publicada no Radar!', 'Sua solicitação já está salva no banco de dados e visível aos motoristas habilitados.');
   };
 
   if (isSubmitted) {

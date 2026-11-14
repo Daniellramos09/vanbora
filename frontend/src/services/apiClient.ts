@@ -16,14 +16,18 @@ async function request<T>(endpoint: string, options?: RequestInit): Promise<ApiR
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout
 
+    const token = localStorage.getItem('vanbora_token');
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options?.headers as Record<string, string> || {}),
+    };
+
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...options,
       signal: controller.signal,
       credentials: 'include', // sends and receives HttpOnly cookies
-      headers: {
-        'Content-Type': 'application/json',
-        ...(options?.headers || {}),
-      },
+      headers,
     });
 
     clearTimeout(timeoutId);

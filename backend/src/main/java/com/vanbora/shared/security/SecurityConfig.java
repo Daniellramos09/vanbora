@@ -39,6 +39,7 @@ public class SecurityConfig {
                 // Rotas Públicas
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/requests/estimate").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/requests/radar").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
                 

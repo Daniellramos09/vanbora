@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useToast } from '../../context/ToastContext';
+import { VanBoraApi } from '../../services/apiClient';
 import { TransportRequest, Vehicle } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
@@ -30,11 +31,54 @@ export const AvailableRequestsPage: React.FC<AvailableRequestsPageProps> = ({ se
   const { requests, vehicles, currentUser, addProposal } = useApp();
   const toast = useToast();
 
+  const [backendRequests, setBackendRequests] = useState<TransportRequest[]>([]);
   const [selectedReq, setSelectedReq] = useState<TransportRequest | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [selectedVehicleId, setSelectedVehicleId] = useState<string>(vehicles[0]?.id || '');
   const [submittedSuccess, setSubmittedSuccess] = useState(false);
+
+  // Busca viagens reais direto do PostgreSQL via Spring Boot
+  useEffect(() => {
+    let isMounted = true;
+    async function loadRadarTrips() {
+      const res = await VanBoraApi.getRadarRequests();
+      if (res.data && Array.isArray(res.data) && isMounted) {
+        const mapped: TransportRequest[] = res.data.map((item: any) => ({
+          id: item.id,
+          clientId: item.customerId,
+          clientName: item.customerName || 'Cliente VanBora',
+          clientType: 'PF',
+          title: item.title,
+          category: (item.category || 'VIAGEM').toLowerCase() as any,
+          origin: item.origin,
+          destination: item.destination,
+          waypoints: (item.waypoints || []).map((w: any) => ({
+            id: w.id,
+            address: w.address,
+            passengersCount: w.passengersCount,
+          })),
+          date: item.departureAt ? item.departureAt.split('T')[0] : '2026-11-20',
+          time: item.departureAt && item.departureAt.includes('T') ? item.departureAt.split('T')[1].substring(0, 5) : '08:00',
+          returnDate: item.returnAt ? item.returnAt.split('T')[0] : undefined,
+          returnTime: item.returnAt && item.returnAt.includes('T') ? item.returnAt.split('T')[1].substring(0, 5) : undefined,
+          passengers: item.passengers,
+          frequency: 'once',
+          estimatedBudgetMin: item.estimatedPrice,
+          estimatedBudgetMax: item.estimatedPrice,
+          additionalDetails: item.additionalDetails,
+          status: 'RECEIVING_PROPOSALS',
+          createdAt: item.createdAt,
+          proposalsCount: 0,
+        }));
+        setBackendRequests(mapped);
+      }
+    }
+    loadRadarTrips();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const openAcceptModal = (req: TransportRequest) => {
     setSelectedReq(req);
@@ -42,12 +86,25 @@ export const AvailableRequestsPage: React.FC<AvailableRequestsPageProps> = ({ se
     setSubmittedSuccess(false);
   };
 
-  const handleConfirmTrip = (e: React.FormEvent) => {
+  const handleConfirmTrip = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedReq) return;
 
     const chosenVehicle = vehicles.find((v) => v.id === selectedVehicleId) || vehicles[0];
     const tripPrice = selectedReq.estimatedBudgetMin || 680;
+
+    // Se a viagem for do backend, tenta registrar a proposta no backend
+    try {
+      await VanBoraApi.submitProposal(currentUser.id, {
+        requestId: selectedReq.id,
+        vehicleId: chosenVehicle?.id,
+        price: tripPrice,
+        conditions: 'Ida e volta garantidas, van com ar-condicionado e pontualidade no horário combinado.',
+        notes: 'Motorista local disponível para atender o grupo com carinho e tranquilidade.',
+      });
+    } catch (err) {
+      console.warn('Backend sync error:', err);
+    }
 
     addProposal({
       requestId: selectedReq.id,
@@ -55,9 +112,9 @@ export const AvailableRequestsPage: React.FC<AvailableRequestsPageProps> = ({ se
       providerName: currentUser.name,
       providerRating: 4.9,
       providerTripsCount: 145,
-      vehicleId: chosenVehicle.id,
-      vehicleModel: chosenVehicle.model,
-      vehicleCapacity: chosenVehicle.capacity,
+      vehicleId: chosenVehicle?.id || 'v1',
+      vehicleModel: chosenVehicle?.model || 'Mercedes Sprinter',
+      vehicleCapacity: chosenVehicle?.capacity || 15,
       price: tripPrice,
       conditions: 'Ida e volta garantidas, van com ar-condicionado e pontualidade no horário combinado.',
       notes: 'Motorista local disponível para atender o grupo com carinho e tranquilidade.',
@@ -67,7 +124,13 @@ export const AvailableRequestsPage: React.FC<AvailableRequestsPageProps> = ({ se
     toast.success('Disponibilidade Registrada!', 'O cliente foi notificado com o seu compromisso de atendimento.');
   };
 
-  const filteredRequests = requests.filter((r) => {
+  // Junta viagens do mock com viagens reais vindas do PostgreSQL (evitando duplicar IDs)
+  const allAvailableRequests = [
+    ...backendRequests,
+    ...requests.filter((r) => !backendRequests.some((br) => br.id === r.id)),
+  ];
+
+  const filteredRequests = allAvailableRequests.filter((r) => {
     if (r.status !== 'RECEIVING_PROPOSALS') return false;
     if (filterCategory !== 'all' && r.category !== filterCategory) return false;
     return true;
