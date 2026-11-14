@@ -18,12 +18,15 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/vehicles")
-@RequiredArgsConstructor
 @Tag(name = "Frota (Fleet)", description = "Gerenciamento de veículos de motoristas parceiros")
 @SecurityRequirement(name = "BearerAuth")
 public class VehicleController {
 
     private final VehicleService vehicleService;
+
+    public VehicleController(VehicleService vehicleService) {
+        this.vehicleService = vehicleService;
+    }
 
     @PostMapping
     @PreAuthorize("hasRole('PROVIDER')")

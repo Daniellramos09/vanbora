@@ -50,10 +50,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleGenericException(Exception ex) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro interno inesperado.");
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage() != null ? ex.getMessage() : "Ocorreu um erro interno inesperado.");
         problemDetail.setTitle("Erro Interno do Servidor");
         problemDetail.setType(URI.create("https://vanbora.com.br/errors/internal-error"));
         problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("exceptionType", ex.getClass().getName());
         return problemDetail;
     }
 }
