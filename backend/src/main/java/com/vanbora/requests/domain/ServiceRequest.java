@@ -84,6 +84,7 @@ public class ServiceRequest {
     public String getOrigin() { return origin; }
     public String getDestination() { return destination; }
     public LocalDateTime getDepartureAt() { return departureAt; }
+    public void setDepartureAt(LocalDateTime departureAt) { this.departureAt = departureAt; }
     public LocalDateTime getReturnAt() { return returnAt; }
     public int getPassengers() { return passengers; }
     public BigDecimal getEstimatedPrice() { return estimatedPrice; }

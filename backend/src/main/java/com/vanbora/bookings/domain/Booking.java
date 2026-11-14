@@ -36,4 +36,17 @@ public class Booking {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "cancellation_reason", columnDefinition = "TEXT")
+    private String cancellationReason;
+
+    @Column(name = "cancelled_at")
+    private LocalDateTime cancelledAt;
+
+    @Column(name = "cancelled_by")
+    private UUID cancelledBy;
+
+    @Column(name = "refund_percentage", precision = 5, scale = 2)
+    @Builder.Default
+    private java.math.BigDecimal refundPercentage = java.math.BigDecimal.ZERO;
 }
