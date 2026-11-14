@@ -14,6 +14,10 @@ import {
   FileCheck2,
   Ticket,
   Share2,
+  Lock,
+  QrCode,
+  KeyRound,
+  CheckCircle2,
 } from 'lucide-react';
 
 interface ClientBookingsPageProps {
@@ -114,6 +118,38 @@ export const ClientBookingsPage: React.FC<ClientBookingsPageProps> = ({ setCurre
                     <span>Motorista e Veículo Verificados</span>
                   </p>
                   <p className="text-slate-500 text-[11px]">CNH D/EAR e CRLV regularizados</p>
+                </div>
+              </div>
+
+              {/* Escrow & Anti-Golpe Security Box */}
+              <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-blue-50 border border-emerald-200/80 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                <div className="flex items-start gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Lock className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-emerald-950 text-sm">
+                        Pagamento Protegido em Custódia (Escrow)
+                      </span>
+                      <span className="text-[10px] font-black uppercase tracking-wider bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-md">
+                        Anti-Golpe
+                      </span>
+                    </div>
+                    <p className="text-emerald-800 text-[11px] mt-0.5 leading-relaxed">
+                      O valor de R$ {b.price.toLocaleString('pt-BR')} está retido pelo VanBora e só será liberado ao motorista após o embarque e término do passeio.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-xl border border-emerald-200 shadow-2xs flex-shrink-0">
+                  <KeyRound className="w-4 h-4 text-emerald-700" />
+                  <div>
+                    <span className="text-[10px] text-brand-muted uppercase font-bold block">Código Check-in</span>
+                    <span className="font-mono font-black text-sm text-brand-ink tracking-wider">
+                      VB-{(b.id || '9872').substring(0, 4).toUpperCase()}
+                    </span>
+                  </div>
                 </div>
               </div>
 

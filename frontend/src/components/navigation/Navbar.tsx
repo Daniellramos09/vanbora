@@ -102,6 +102,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => 
                   Visão Geral
                 </button>
                 <button
+                  onClick={() => setCurrentTab('providers-catalog')}
+                  className={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
+                    currentTab === 'providers-catalog'
+                      ? 'bg-brand-surface text-brand-ink shadow-sm border border-brand-border'
+                      : 'text-brand-muted hover:text-brand-ink'
+                  }`}
+                >
+                  Catálogo de Vans
+                </button>
+                <button
                   onClick={() => setCurrentTab('how-it-works')}
                   className={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
                     currentTab === 'how-it-works'
@@ -145,6 +155,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => 
                   }`}
                 >
                   Minhas Viagens
+                </button>
+                <button
+                  onClick={() => setCurrentTab('providers-catalog')}
+                  className={`px-4 py-2 rounded-full text-sm font-bold ${
+                    currentTab === 'providers-catalog'
+                      ? 'bg-brand-surface text-brand-ink shadow-sm border border-brand-border'
+                      : 'text-brand-muted hover:text-brand-ink'
+                  }`}
+                >
+                  Catálogo de Vans
                 </button>
                 <button
                   onClick={() => setCurrentTab('new-request')}

@@ -84,6 +84,10 @@ export const VanBoraApi = {
 
   getRadarRequests: () => request<any[]>('/requests/radar'),
 
+  // Provedores & Catálogo de Motoristas
+  getProvidersCatalog: (region?: string) =>
+    request<any[]>(`/providers/catalog${region ? `?region=${encodeURIComponent(region)}` : ''}`),
+
   // Propostas & Contratação
   submitProposal: (providerId: string, payload: any) =>
     request<any>(`/proposals?providerId=${providerId}`, {
