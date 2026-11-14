@@ -35,7 +35,26 @@ export default {
       boxShadow: {
         'towel': '0 8px 30px -4px rgba(22, 35, 59, 0.08), 0 2px 6px -1px rgba(22, 35, 59, 0.04)',
         'towel-hover': '0 16px 40px -6px rgba(22, 35, 59, 0.12), 0 4px 12px -2px rgba(22, 35, 59, 0.06)',
-      }
+      },
+      keyframes: {
+        'slide-up': {
+          '0%': { transform: 'translateY(16px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'pulse-subtle': {
+          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+          '50%': { opacity: '0.85', transform: 'scale(1.02)' },
+        },
+      },
+      animation: {
+        'slide-up': 'slide-up 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'fade-in': 'fade-in 0.2s ease-out forwards',
+        'pulse-subtle': 'pulse-subtle 3s ease-in-out infinite',
+      },
     },
   },
   plugins: [],

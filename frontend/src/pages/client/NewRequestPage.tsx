@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { useToast } from '../../context/ToastContext';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
@@ -94,6 +95,7 @@ const ROUTE_PRESETS: RoutePreset[] = [
 
 export const NewRequestPage: React.FC<NewRequestPageProps> = ({ setCurrentTab }) => {
   const { addRequest, calculateEstimate, currentUser, setRole } = useApp();
+  const toast = useToast();
 
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState<TransportCategory>('eventual');
@@ -183,6 +185,7 @@ export const NewRequestPage: React.FC<NewRequestPageProps> = ({ setCurrentTab })
 
     setCreatedRequestId(newReq.id);
     setIsSubmitted(true);
+    toast.success('Viagem Publicada no Radar!', 'Motoristas habilitados na sua região já podem visualizar a solicitação.');
   };
 
   if (isSubmitted) {

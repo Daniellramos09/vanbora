@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { useToast } from '../../context/ToastContext';
 import { TransportRequest, Vehicle } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
@@ -27,6 +28,7 @@ interface AvailableRequestsPageProps {
 
 export const AvailableRequestsPage: React.FC<AvailableRequestsPageProps> = ({ setCurrentTab }) => {
   const { requests, vehicles, currentUser, addProposal } = useApp();
+  const toast = useToast();
 
   const [selectedReq, setSelectedReq] = useState<TransportRequest | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,6 +64,7 @@ export const AvailableRequestsPage: React.FC<AvailableRequestsPageProps> = ({ se
     });
 
     setSubmittedSuccess(true);
+    toast.success('Disponibilidade Registrada!', 'O cliente foi notificado com o seu compromisso de atendimento.');
   };
 
   const filteredRequests = requests.filter((r) => {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { AuditStampIllustration } from '../illustrations/AuditStampIllustration';
+import { useToast } from '../../context/ToastContext';
 import {
   ShieldCheck,
   Calendar,
@@ -45,6 +46,7 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
   booking,
 }) => {
   const [copied, setCopied] = useState(false);
+  const toast = useToast();
 
   if (!booking) return null;
 
@@ -61,10 +63,12 @@ export const BoardingPassModal: React.FC<BoardingPassModalProps> = ({
   const handleCopyShare = () => {
     navigator.clipboard.writeText(shareText);
     setCopied(true);
+    toast.success('Copiado para a área de transferência!', 'Texto formatado pronto para enviar no grupo do WhatsApp.');
     setTimeout(() => setCopied(false), 2500);
   };
 
   const handlePrint = () => {
+    toast.info('Preparando impressão', 'A janela do navegador para impressão do bilhete foi iniciada.');
     window.print();
   };
 

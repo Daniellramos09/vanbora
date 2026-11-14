@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { useToast } from '../../context/ToastContext';
 import { TransportRequest, Proposal } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
@@ -24,6 +25,7 @@ interface ClientRequestsPageProps {
 
 export const ClientRequestsPage: React.FC<ClientRequestsPageProps> = ({ setCurrentTab }) => {
   const { requests, proposals, acceptProposal } = useApp();
+  const toast = useToast();
   const [selectedRequest, setSelectedRequest] = useState<TransportRequest | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [acceptedSuccess, setAcceptedSuccess] = useState(false);
@@ -43,6 +45,7 @@ export const ClientRequestsPage: React.FC<ClientRequestsPageProps> = ({ setCurre
     if (!selectedRequest) return;
     acceptProposal(proposalId, selectedRequest.id);
     setAcceptedSuccess(true);
+    toast.success('Contrato Formalizado!', 'A proposta foi aceita e o bilhete da viagem já está disponível em Contratos.');
   };
 
   return (
