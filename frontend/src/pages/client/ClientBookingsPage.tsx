@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { BoardingPassModal, BoardingPassData } from '../../components/ui/BoardingPassModal';
 import {
   Calendar,
   MapPin,
@@ -11,7 +12,8 @@ import {
   Users,
   ShieldCheck,
   FileCheck2,
-  Phone,
+  Ticket,
+  Share2,
 } from 'lucide-react';
 
 interface ClientBookingsPageProps {
@@ -20,6 +22,26 @@ interface ClientBookingsPageProps {
 
 export const ClientBookingsPage: React.FC<ClientBookingsPageProps> = ({ setCurrentTab }) => {
   const { bookings } = useApp();
+  const [selectedBooking, setSelectedBooking] = useState<BoardingPassData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenBoardingPass = (booking: any) => {
+    setSelectedBooking({
+      id: booking.id,
+      requestId: booking.requestId,
+      clientName: booking.clientName || 'Cliente VanBora',
+      providerName: booking.providerName,
+      vehicleModel: booking.vehicleModel,
+      plate: booking.plate || 'SP · REGULAR',
+      origin: booking.origin,
+      destination: booking.destination,
+      date: booking.date,
+      time: booking.time,
+      passengers: booking.passengers,
+      price: booking.price,
+    });
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
@@ -27,7 +49,7 @@ export const ClientBookingsPage: React.FC<ClientBookingsPageProps> = ({ setCurre
         <div>
           <h1 className="text-2xl font-extrabold text-brand-text">Contratações Formalizadas</h1>
           <p className="text-sm text-brand-muted">
-            Serviços com van e motorista confirmados com veículo verificado e termos registrados.
+            Serviços com van e motorista confirmados com veículo verificado, termos registrados e bilhete digital.
           </p>
         </div>
       </div>
@@ -50,7 +72,7 @@ export const ClientBookingsPage: React.FC<ClientBookingsPageProps> = ({ setCurre
                       <ShieldCheck className="w-3.5 h-3.5" />
                       Contrato Confirmado
                     </span>
-                    <span className="text-xs text-brand-muted">Registro: #{b.id}</span>
+                    <span className="text-xs text-brand-muted font-mono">Registro: #{b.id}</span>
                   </div>
                   <h3 className="text-base font-bold text-brand-text mt-1">
                     {b.origin.split('-')[0]} ➔ {b.destination.split('-')[0]}
@@ -61,7 +83,7 @@ export const ClientBookingsPage: React.FC<ClientBookingsPageProps> = ({ setCurre
                   <p className="text-xl font-extrabold text-brand-blue-dark">
                     R$ {b.price.toLocaleString('pt-BR')}
                   </p>
-                  <p className="text-[11px] text-brand-muted">Valor contratado</p>
+                  <p className="text-[11px] text-brand-muted">Valor contratado fechado</p>
                 </div>
               </div>
 
@@ -91,7 +113,7 @@ export const ClientBookingsPage: React.FC<ClientBookingsPageProps> = ({ setCurre
                     <ShieldCheck className="w-4 h-4 text-brand-green" />
                     <span>Motorista e Veículo Verificados</span>
                   </p>
-                  <p className="text-slate-500 text-[11px]">CNH D/EAR e CRLV em dia</p>
+                  <p className="text-slate-500 text-[11px]">CNH D/EAR e CRLV regularizados</p>
                 </div>
               </div>
 
@@ -106,11 +128,11 @@ export const ClientBookingsPage: React.FC<ClientBookingsPageProps> = ({ setCurre
                 <div className="flex items-center gap-2">
                   <Button
                     size="sm"
-                    variant="outline"
-                    icon={<FileCheck2 className="w-4 h-4" />}
-                    onClick={() => alert(`Comprovante de Contrato #${b.id}\nOrigem: ${b.origin}\nDestino: ${b.destination}\nPrestador: ${b.providerName}\nValor: R$ ${b.price}\nTermos de Transporte e Compromisso de Viagem vinculados.`)}
+                    variant="primary"
+                    icon={<Ticket className="w-4 h-4" />}
+                    onClick={() => handleOpenBoardingPass(b)}
                   >
-                    Ver Comprovante Formal
+                    Ver Bilhete & Comprovante Formal
                   </Button>
                 </div>
               </div>
@@ -118,6 +140,13 @@ export const ClientBookingsPage: React.FC<ClientBookingsPageProps> = ({ setCurre
           ))}
         </div>
       )}
+
+      {/* Bilhete / Comprovante Modal */}
+      <BoardingPassModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        booking={selectedBooking}
+      />
     </div>
   );
 };
